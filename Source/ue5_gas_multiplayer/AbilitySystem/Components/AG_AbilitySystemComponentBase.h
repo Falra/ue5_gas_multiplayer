@@ -13,5 +13,5 @@ UCLASS()
 class UE5_GAS_MULTIPLAYER_API UAG_AbilitySystemComponentBase : public UAbilitySystemComponent
 {
     GENERATED_BODY()
-    
+
 };
