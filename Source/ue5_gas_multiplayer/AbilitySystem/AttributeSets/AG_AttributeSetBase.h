@@ -33,8 +33,8 @@ protected:
     virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
     
     UFUNCTION()
-    virtual void OnRep_Health();
+    virtual void OnRep_Health(const FGameplayAttributeData& OldHealth);
 
     UFUNCTION()
-    virtual void OnRep_MaxHealth();
+    virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth);
 };
