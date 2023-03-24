@@ -12,5 +12,6 @@ UCLASS()
 class UE5_GAS_MULTIPLAYER_API UAG_GameInstance : public UGameInstance
 {
     GENERATED_BODY()
-
+public:
+    virtual void Init() override;
 };
