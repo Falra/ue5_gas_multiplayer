@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameplayEffectTypes.h"
+#include "AbilitySystem/AttributeSets/AG_AttributeSetBase.h"
+#include "AbilitySystem/Components/AG_AbilitySystemComponentBase.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -51,33 +53,81 @@ Aue5_gas_multiplayerCharacter::Aue5_gas_multiplayerCharacter()
 
     // Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
     // are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+    // Ability system
+    AbilitySystemComponent = CreateDefaultSubobject<UAG_AbilitySystemComponentBase>(TEXT("AbilitySystemComponent"));
+    AbilitySystemComponent->SetIsReplicated(true);
+    AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+
+    AttributeSet = CreateDefaultSubobject<UAG_AttributeSetBase>(TEXT("AttributeSet"));
 }
 
 bool Aue5_gas_multiplayerCharacter::ApplyGameplayEffectToSelf(TSubclassOf<UGameplayEffect> Effect,
     FGameplayEffectContextHandle InEffectContext)
 {
+    if (!Effect.Get())
+    {
+        return false;
+    }
+    const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(Effect, 1, InEffectContext);
+    if (!SpecHandle.IsValid())
+    {
+        return false;
+    }
+    const FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+    return ActiveGEHandle.WasSuccessfullyApplied();
 }
 
 void Aue5_gas_multiplayerCharacter::InitializeAttributes()
 {
+    if (GetLocalRole() == ROLE_Authority && DefaultAttributeSet && AttributeSet)
+    {
+        FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+        EffectContext.AddSourceObject(this);
+        ApplyGameplayEffectToSelf(DefaultAttributeSet, EffectContext);
+    }
 }
 
 void Aue5_gas_multiplayerCharacter::GiveAbilities()
 {
+    if (HasAuthority() && AbilitySystemComponent)
+    {
+        for (const auto DefaultAbility : DefaultAbilities)
+        {
+            AbilitySystemComponent->GiveAbility(DefaultAbility);
+        }
+    }
 }
 
 void Aue5_gas_multiplayerCharacter::ApplyStartupEffects()
 {
+    if (GetLocalRole() == ROLE_Authority && DefaultAttributeSet && AttributeSet)
+    {
+        FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+        EffectContext.AddSourceObject(this);
+        for (const auto CharacterEffect : DefaultEffects)
+        {
+            ApplyGameplayEffectToSelf(CharacterEffect, EffectContext);
+        }
+    }
 }
 
 void Aue5_gas_multiplayerCharacter::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
+
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
+    InitializeAttributes();
+    GiveAbilities();
+    ApplyStartupEffects();
 }
 
 void Aue5_gas_multiplayerCharacter::OnRep_PlayerState()
 {
     Super::OnRep_PlayerState();
+    
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
+    InitializeAttributes();
 }
 
 void Aue5_gas_multiplayerCharacter::BeginPlay()
