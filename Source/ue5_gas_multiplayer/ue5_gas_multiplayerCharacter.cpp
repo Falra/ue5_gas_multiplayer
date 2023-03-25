@@ -78,6 +78,11 @@ bool Aue5_gas_multiplayerCharacter::ApplyGameplayEffectToSelf(TSubclassOf<UGamep
     return ActiveGEHandle.WasSuccessfullyApplied();
 }
 
+UAbilitySystemComponent* Aue5_gas_multiplayerCharacter::GetAbilitySystemComponent() const
+{
+    return AbilitySystemComponent;
+}
+
 void Aue5_gas_multiplayerCharacter::InitializeAttributes()
 {
     if (GetLocalRole() == ROLE_Authority && DefaultAttributeSet && AttributeSet)

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "ue5_gas_multiplayerCharacter.generated.h"
@@ -16,7 +17,7 @@ class UGameplayAbility;
 struct FGameplayEffectContextHandle;
 
 UCLASS(config=Game)
-class Aue5_gas_multiplayerCharacter : public ACharacter
+class Aue5_gas_multiplayerCharacter : public ACharacter, public IAbilitySystemInterface
 {
     GENERATED_BODY()
 
@@ -48,6 +49,8 @@ public:
     Aue5_gas_multiplayerCharacter();
 
     bool ApplyGameplayEffectToSelf(TSubclassOf<UGameplayEffect> Effect, FGameplayEffectContextHandle InEffectContext);
+
+    virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 protected:
     void InitializeAttributes();
     void GiveAbilities();
