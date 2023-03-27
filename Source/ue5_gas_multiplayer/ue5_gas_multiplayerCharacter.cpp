@@ -106,7 +106,7 @@ void Aue5_gas_multiplayerCharacter::GiveAbilities()
 
 void Aue5_gas_multiplayerCharacter::ApplyStartupEffects()
 {
-    if (GetLocalRole() == ROLE_Authority && DefaultAttributeSet && AttributeSet)
+    if (GetLocalRole() == ROLE_Authority)
     {
         FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
         EffectContext.AddSourceObject(this);
