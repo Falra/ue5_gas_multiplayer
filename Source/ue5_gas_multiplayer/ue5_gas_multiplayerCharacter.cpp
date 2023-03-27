@@ -12,6 +12,8 @@
 #include "GameplayEffectTypes.h"
 #include "AbilitySystem/AttributeSets/AG_AttributeSetBase.h"
 #include "AbilitySystem/Components/AG_AbilitySystemComponentBase.h"
+#include "DataAssets/CharacterDataAsset.h"
+#include "Net/UnrealNetwork.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -62,6 +64,16 @@ Aue5_gas_multiplayerCharacter::Aue5_gas_multiplayerCharacter()
     AttributeSet = CreateDefaultSubobject<UAG_AttributeSetBase>(TEXT("AttributeSet"));
 }
 
+void Aue5_gas_multiplayerCharacter::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
+
+    if (IsValid(CharacterDataAsset))
+    {
+        SetCharacterData(CharacterDataAsset->CharacterData);
+    }
+}
+
 bool Aue5_gas_multiplayerCharacter::ApplyGameplayEffectToSelf(TSubclassOf<UGameplayEffect> Effect,
     FGameplayEffectContextHandle InEffectContext)
 {
@@ -83,21 +95,11 @@ UAbilitySystemComponent* Aue5_gas_multiplayerCharacter::GetAbilitySystemComponen
     return AbilitySystemComponent;
 }
 
-void Aue5_gas_multiplayerCharacter::InitializeAttributes()
-{
-    if (GetLocalRole() == ROLE_Authority && DefaultAttributeSet && AttributeSet)
-    {
-        FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
-        EffectContext.AddSourceObject(this);
-        ApplyGameplayEffectToSelf(DefaultAttributeSet, EffectContext);
-    }
-}
-
 void Aue5_gas_multiplayerCharacter::GiveAbilities()
 {
     if (HasAuthority() && AbilitySystemComponent)
     {
-        for (const auto DefaultAbility : DefaultAbilities)
+        for (const auto DefaultAbility : CharacterData.Abilities)
         {
             AbilitySystemComponent->GiveAbility(DefaultAbility);
         }
@@ -110,7 +112,7 @@ void Aue5_gas_multiplayerCharacter::ApplyStartupEffects()
     {
         FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
         EffectContext.AddSourceObject(this);
-        for (const auto CharacterEffect : DefaultEffects)
+        for (const auto CharacterEffect : CharacterData.Effects)
         {
             ApplyGameplayEffectToSelf(CharacterEffect, EffectContext);
         }
@@ -122,7 +124,6 @@ void Aue5_gas_multiplayerCharacter::PossessedBy(AController* NewController)
     Super::PossessedBy(NewController);
 
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
-    InitializeAttributes();
     GiveAbilities();
     ApplyStartupEffects();
 }
@@ -132,7 +133,6 @@ void Aue5_gas_multiplayerCharacter::OnRep_PlayerState()
     Super::OnRep_PlayerState();
     
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
-    InitializeAttributes();
 }
 
 void Aue5_gas_multiplayerCharacter::BeginPlay()
@@ -208,4 +208,32 @@ void Aue5_gas_multiplayerCharacter::Look(const FInputActionValue& Value)
         AddControllerYawInput(LookAxisVector.X);
         AddControllerPitchInput(LookAxisVector.Y);
     }
+}
+
+FCharacterData Aue5_gas_multiplayerCharacter::GetCharacterData() const
+{
+    return CharacterData;
+}
+
+void Aue5_gas_multiplayerCharacter::SetCharacterData(const FCharacterData& InCharacterData)
+{
+    CharacterData = InCharacterData;
+
+    InitFromCharacterData(CharacterData);
+}
+
+void Aue5_gas_multiplayerCharacter::InitFromCharacterData(const FCharacterData& InCharacterData, bool bFromReplication)
+{
+}
+
+void Aue5_gas_multiplayerCharacter::OnRep_CharacterData()
+{
+    InitFromCharacterData(CharacterData, true);
+}
+
+void Aue5_gas_multiplayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(Aue5_gas_multiplayerCharacter, CharacterData);
 }
