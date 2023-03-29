@@ -12,6 +12,7 @@
 #include "GameplayEffectTypes.h"
 #include "AbilitySystem/AttributeSets/AG_AttributeSetBase.h"
 #include "AbilitySystem/Components/AG_AbilitySystemComponentBase.h"
+#include "ActorComponents/AG_CharacterMovementComponent.h"
 #include "DataAssets/CharacterDataAsset.h"
 #include "Net/UnrealNetwork.h"
 
@@ -19,7 +20,8 @@
 //////////////////////////////////////////////////////////////////////////
 // Aue5_gas_multiplayerCharacter
 
-Aue5_gas_multiplayerCharacter::Aue5_gas_multiplayerCharacter()
+Aue5_gas_multiplayerCharacter::Aue5_gas_multiplayerCharacter(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer.SetDefaultSubobjectClass<UAG_CharacterMovementComponent>(CharacterMovementComponentName))
 {
     // Set size for collision capsule
     GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);

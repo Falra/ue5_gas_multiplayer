@@ -47,7 +47,7 @@ class Aue5_gas_multiplayerCharacter : public ACharacter, public IAbilitySystemIn
     class UInputAction* LookAction;
 
 public:
-    Aue5_gas_multiplayerCharacter();
+    Aue5_gas_multiplayerCharacter(const FObjectInitializer& ObjectInitializer);
 
     virtual void PostInitializeComponents() override;
 
