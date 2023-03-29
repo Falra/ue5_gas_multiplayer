@@ -4,6 +4,8 @@
 #include "AG_AttributeSetBase.h"
 
 #include "GameplayEffectExtension.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
 
 void UAG_AttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -13,6 +15,14 @@ void UAG_AttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCal
     if (Data.EvaluatedData.Attribute == GetHealthAttribute())
     {
         SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
+    }
+    else if (Data.EvaluatedData.Attribute == GetMaxMovementSpeedAttribute())
+    {
+        const auto* OwningCharacter = Cast<ACharacter>(GetOwningActor());
+        if (auto* CharacterMovement = OwningCharacter ? OwningCharacter->GetCharacterMovement() : nullptr)
+        {
+            CharacterMovement->MaxWalkSpeed = GetMaxMovementSpeed();
+        }
     }
 }
 
