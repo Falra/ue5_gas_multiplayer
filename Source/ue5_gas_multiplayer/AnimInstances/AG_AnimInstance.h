@@ -14,4 +14,10 @@ class UE5_GAS_MULTIPLAYER_API UAG_AnimInstance : public UAnimInstance
 {
     GENERATED_BODY()
 
+protected:
+    UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+    UBlendSpace* GetLocomotionBlendSpace() const;
+
+    UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+    UAnimationAsset* GetIdleAnimation() const;
 };
