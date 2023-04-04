@@ -20,4 +20,10 @@ protected:
 
     UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
     UAnimSequenceBase* GetIdleAnimation() const;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Animation")
+    class UCharacterAnimDataAsset* DefaultCharacterAnimDataAsset;
+
+private:
+    UCharacterAnimDataAsset* GetCharacterAnimDataAsset() const;
 };
