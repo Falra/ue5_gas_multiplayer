@@ -19,5 +19,5 @@ protected:
     UBlendSpace* GetLocomotionBlendSpace() const;
 
     UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
-    UAnimationAsset* GetIdleAnimation() const;
+    UAnimSequenceBase* GetIdleAnimation() const;
 };

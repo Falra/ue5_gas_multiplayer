@@ -29,5 +29,5 @@ struct FCharacterAnimationData
     class UBlendSpace* MovementBlendSpace = nullptr;
 
     UPROPERTY(EditDefaultsOnly)
-    class UAnimationAsset* IdleAnimationAsset = nullptr;
+    class UAnimSequenceBase* IdleAnimationAsset = nullptr;
 };

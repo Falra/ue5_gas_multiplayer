@@ -19,7 +19,7 @@ UBlendSpace* UAG_AnimInstance::GetLocomotionBlendSpace() const
     return nullptr;
 }
 
-UAnimationAsset* UAG_AnimInstance::GetIdleAnimation() const
+UAnimSequenceBase* UAG_AnimInstance::GetIdleAnimation() const
 {
     if (const auto* Character = Cast<Aue5_gas_multiplayerCharacter>(GetOwningActor()))
     {
