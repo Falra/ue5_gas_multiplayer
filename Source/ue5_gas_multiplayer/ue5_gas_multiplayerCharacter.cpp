@@ -13,6 +13,7 @@
 #include "AbilitySystem/AttributeSets/AG_AttributeSetBase.h"
 #include "AbilitySystem/Components/AG_AbilitySystemComponentBase.h"
 #include "ActorComponents/AG_CharacterMovementComponent.h"
+#include "ActorComponents/AG_FootstepComponent.h"
 #include "DataAssets/CharacterDataAsset.h"
 #include "Net/UnrealNetwork.h"
 
@@ -64,6 +65,7 @@ Aue5_gas_multiplayerCharacter::Aue5_gas_multiplayerCharacter(const FObjectInitia
     AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
     AttributeSet = CreateDefaultSubobject<UAG_AttributeSetBase>(TEXT("AttributeSet"));
+    FootstepComponent = CreateDefaultSubobject<UAG_FootstepComponent>(TEXT("FootstepComponent"));
 }
 
 void Aue5_gas_multiplayerCharacter::PostInitializeComponents()
