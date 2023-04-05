@@ -1,33 +1,52 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "ActorComponents/AG_FootstepComponent.h"
 
-// Sets default values for this component's properties
+#include "ue5_gas_multiplayerCharacter.h"
+#include "PhysicalMaterials/AG_PhysicalMaterial.h"
+
 UAG_FootstepComponent::UAG_FootstepComponent()
 {
-    // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-    // off to improve performance if you don't need them.
-    PrimaryComponentTick.bCanEverTick = true;
-
-    // ...
+    PrimaryComponentTick.bCanEverTick = false;
 }
 
-
-// Called when the game starts
 void UAG_FootstepComponent::BeginPlay()
 {
     Super::BeginPlay();
-
-    // ...
-
 }
 
-
-// Called every frame
-void UAG_FootstepComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UAG_FootstepComponent::HandleFootstep(EFoot Foot)
 {
-    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    const auto* Character = Cast<Aue5_gas_multiplayerCharacter>(GetOwner());
+    if (!Character)
+    {
+        return;
+    }
+    const auto* Mesh = Character->GetMesh();
+    if (!Mesh)
+    {
+        return;
+    }
+    FHitResult HitResult;
+    FVector SocketLocation = Mesh->GetSocketLocation(Foot == EFoot::Left ? LeftSocketName : RightSocketName);
+    FVector Location = SocketLocation + FVector::UpVector * 20;
 
-    // ...
+    FCollisionQueryParams QueryParams;
+    QueryParams.bReturnPhysicalMaterial = true;
+    QueryParams.AddIgnoredActor(Character);
+
+    if (GetWorld()->LineTraceSingleByChannel(HitResult, Location,
+        Location + FVector::UpVector * - 50.0f, ECC_WorldStatic, QueryParams))
+    {
+        if (HitResult.bBlockingHit)
+        {
+            return;
+        }
+        auto* Material = Cast<UAG_PhysicalMaterial>(HitResult.PhysMaterial.Get());
+        if (!Material)
+        {
+            return;
+        }
+        
+    }
 }

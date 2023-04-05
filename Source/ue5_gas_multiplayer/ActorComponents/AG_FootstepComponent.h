@@ -7,22 +7,25 @@
 #include "AG_FootstepComponent.generated.h"
 
 
+enum class EFoot : uint8;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class UE5_GAS_MULTIPLAYER_API UAG_FootstepComponent : public UActorComponent
 {
     GENERATED_BODY()
 
 public:
-    // Sets default values for this component's properties
     UAG_FootstepComponent();
 
 protected:
-    // Called when the game starts
     virtual void BeginPlay() override;
 
+    UPROPERTY(EditDefaultsOnly)
+    FName LeftSocketName = TEXT("LeftFootSocket");
+    
+    UPROPERTY(EditDefaultsOnly)
+    FName RightSocketName = TEXT("RightFootSocket");
+
 public:
-    // Called every frame
-    virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-
+    void HandleFootstep(EFoot Foot);
 };
