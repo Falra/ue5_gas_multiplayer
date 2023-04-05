@@ -26,8 +26,15 @@ struct FCharacterAnimationData
     GENERATED_BODY();
 
     UPROPERTY(EditDefaultsOnly)
-    class UBlendSpace* MovementBlendSpace = nullptr;
+    UBlendSpace* MovementBlendSpace = nullptr;
 
     UPROPERTY(EditDefaultsOnly)
-    class UAnimSequenceBase* IdleAnimationAsset = nullptr;
+    UAnimSequenceBase* IdleAnimationAsset = nullptr;
+};
+
+UENUM(BlueprintType)
+enum class EFoot : uint8
+{
+    Left UMETA(DisplayName = "Left"),
+    Right UMETA(DisplayName = "Right")
 };
