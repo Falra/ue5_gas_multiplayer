@@ -6,12 +6,11 @@
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "AG_PhysicalMaterial.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class UE5_GAS_MULTIPLAYER_API UAG_PhysicalMaterial : public UPhysicalMaterial
 {
     GENERATED_BODY()
-
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PhysicalMaterial")
+    USoundBase* FootstepSound = nullptr;
 };
