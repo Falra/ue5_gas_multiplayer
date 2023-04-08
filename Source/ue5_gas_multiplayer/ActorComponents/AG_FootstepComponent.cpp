@@ -2,7 +2,7 @@
 
 #include "ActorComponents/AG_FootstepComponent.h"
 
-#include "ue5_gas_multiplayerCharacter.h"
+#include "..\AG_Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "PhysicalMaterials/AG_PhysicalMaterial.h"
 
@@ -25,7 +25,7 @@ void UAG_FootstepComponent::BeginPlay()
 
 void UAG_FootstepComponent::HandleFootstep(EFoot Foot)
 {
-    const auto* Character = Cast<Aue5_gas_multiplayerCharacter>(GetOwner());
+    const auto* Character = Cast<AAG_Character>(GetOwner());
     if (!Character)
     {
         return;

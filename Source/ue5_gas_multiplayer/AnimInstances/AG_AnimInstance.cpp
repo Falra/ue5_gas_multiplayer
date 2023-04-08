@@ -3,7 +3,7 @@
 
 #include "AnimInstances/AG_AnimInstance.h"
 
-#include "ue5_gas_multiplayerCharacter.h"
+#include "..\AG_Character.h"
 #include "DataAssets/CharacterAnimDataAsset.h"
 
 UBlendSpace* UAG_AnimInstance::GetLocomotionBlendSpace() const
@@ -20,7 +20,7 @@ UAnimSequenceBase* UAG_AnimInstance::GetIdleAnimation() const
 
 UCharacterAnimDataAsset* UAG_AnimInstance::GetCharacterAnimDataAsset() const
 {
-    if (const auto* Character = Cast<Aue5_gas_multiplayerCharacter>(GetOwningActor()))
+    if (const auto* Character = Cast<AAG_Character>(GetOwningActor()))
     {
         const FCharacterData Data = Character->GetCharacterData();
         if (Data.CharacterAnimDataAsset)

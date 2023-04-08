@@ -7,7 +7,7 @@
 #include "ActionGameTypes.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "ue5_gas_multiplayerCharacter.generated.h"
+#include "AG_Character.generated.h"
 
 class UAG_AbilitySystemComponentBase;
 class UAG_AttributeSetBase;
@@ -18,7 +18,7 @@ class UGameplayAbility;
 struct FGameplayEffectContextHandle;
 
 UCLASS(config=Game)
-class Aue5_gas_multiplayerCharacter : public ACharacter, public IAbilitySystemInterface
+class AAG_Character : public ACharacter, public IAbilitySystemInterface
 {
     GENERATED_BODY()
 
@@ -47,7 +47,7 @@ class Aue5_gas_multiplayerCharacter : public ACharacter, public IAbilitySystemIn
     class UInputAction* LookAction;
 
 public:
-    Aue5_gas_multiplayerCharacter(const FObjectInitializer& ObjectInitializer);
+    AAG_Character(const FObjectInitializer& ObjectInitializer);
 
     virtual void PostInitializeComponents() override;
 

@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "ue5_gas_multiplayerCharacter.h"
+#include "AG_Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -19,9 +19,9 @@
 
 
 //////////////////////////////////////////////////////////////////////////
-// Aue5_gas_multiplayerCharacter
+// AAG_Character
 
-Aue5_gas_multiplayerCharacter::Aue5_gas_multiplayerCharacter(const FObjectInitializer& ObjectInitializer)
+AAG_Character::AAG_Character(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer.SetDefaultSubobjectClass<UAG_CharacterMovementComponent>(CharacterMovementComponentName))
 {
     // Set size for collision capsule
@@ -68,7 +68,7 @@ Aue5_gas_multiplayerCharacter::Aue5_gas_multiplayerCharacter(const FObjectInitia
     FootstepComponent = CreateDefaultSubobject<UAG_FootstepComponent>(TEXT("FootstepComponent"));
 }
 
-void Aue5_gas_multiplayerCharacter::PostInitializeComponents()
+void AAG_Character::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
 
@@ -78,7 +78,7 @@ void Aue5_gas_multiplayerCharacter::PostInitializeComponents()
     }
 }
 
-bool Aue5_gas_multiplayerCharacter::ApplyGameplayEffectToSelf(TSubclassOf<UGameplayEffect> Effect,
+bool AAG_Character::ApplyGameplayEffectToSelf(TSubclassOf<UGameplayEffect> Effect,
     FGameplayEffectContextHandle InEffectContext)
 {
     if (!Effect.Get())
@@ -94,12 +94,12 @@ bool Aue5_gas_multiplayerCharacter::ApplyGameplayEffectToSelf(TSubclassOf<UGamep
     return ActiveGEHandle.WasSuccessfullyApplied();
 }
 
-UAbilitySystemComponent* Aue5_gas_multiplayerCharacter::GetAbilitySystemComponent() const
+UAbilitySystemComponent* AAG_Character::GetAbilitySystemComponent() const
 {
     return AbilitySystemComponent;
 }
 
-void Aue5_gas_multiplayerCharacter::GiveAbilities()
+void AAG_Character::GiveAbilities()
 {
     if (HasAuthority() && AbilitySystemComponent)
     {
@@ -110,7 +110,7 @@ void Aue5_gas_multiplayerCharacter::GiveAbilities()
     }
 }
 
-void Aue5_gas_multiplayerCharacter::ApplyStartupEffects()
+void AAG_Character::ApplyStartupEffects()
 {
     if (GetLocalRole() == ROLE_Authority)
     {
@@ -123,7 +123,7 @@ void Aue5_gas_multiplayerCharacter::ApplyStartupEffects()
     }
 }
 
-void Aue5_gas_multiplayerCharacter::PossessedBy(AController* NewController)
+void AAG_Character::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
 
@@ -132,14 +132,14 @@ void Aue5_gas_multiplayerCharacter::PossessedBy(AController* NewController)
     ApplyStartupEffects();
 }
 
-void Aue5_gas_multiplayerCharacter::OnRep_PlayerState()
+void AAG_Character::OnRep_PlayerState()
 {
     Super::OnRep_PlayerState();
     
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
-void Aue5_gas_multiplayerCharacter::BeginPlay()
+void AAG_Character::BeginPlay()
 {
     // Call the base class  
     Super::BeginPlay();
@@ -158,7 +158,7 @@ void Aue5_gas_multiplayerCharacter::BeginPlay()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void Aue5_gas_multiplayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void AAG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
     // Set up action bindings
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
@@ -169,16 +169,16 @@ void Aue5_gas_multiplayerCharacter::SetupPlayerInputComponent(class UInputCompon
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
         //Moving
-        EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &Aue5_gas_multiplayerCharacter::Move);
+        EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAG_Character::Move);
 
         //Looking
-        EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &Aue5_gas_multiplayerCharacter::Look);
+        EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAG_Character::Look);
 
     }
 
 }
 
-void Aue5_gas_multiplayerCharacter::Move(const FInputActionValue& Value)
+void AAG_Character::Move(const FInputActionValue& Value)
 {
     // input is a Vector2D
     FVector2D MovementVector = Value.Get<FVector2D>();
@@ -201,7 +201,7 @@ void Aue5_gas_multiplayerCharacter::Move(const FInputActionValue& Value)
     }
 }
 
-void Aue5_gas_multiplayerCharacter::Look(const FInputActionValue& Value)
+void AAG_Character::Look(const FInputActionValue& Value)
 {
     // input is a Vector2D
     FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -214,30 +214,30 @@ void Aue5_gas_multiplayerCharacter::Look(const FInputActionValue& Value)
     }
 }
 
-FCharacterData Aue5_gas_multiplayerCharacter::GetCharacterData() const
+FCharacterData AAG_Character::GetCharacterData() const
 {
     return CharacterData;
 }
 
-void Aue5_gas_multiplayerCharacter::SetCharacterData(const FCharacterData& InCharacterData)
+void AAG_Character::SetCharacterData(const FCharacterData& InCharacterData)
 {
     CharacterData = InCharacterData;
 
     InitFromCharacterData(CharacterData);
 }
 
-void Aue5_gas_multiplayerCharacter::InitFromCharacterData(const FCharacterData& InCharacterData, bool bFromReplication)
+void AAG_Character::InitFromCharacterData(const FCharacterData& InCharacterData, bool bFromReplication)
 {
 }
 
-void Aue5_gas_multiplayerCharacter::OnRep_CharacterData()
+void AAG_Character::OnRep_CharacterData()
 {
     InitFromCharacterData(CharacterData, true);
 }
 
-void Aue5_gas_multiplayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void AAG_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-    DOREPLIFETIME(Aue5_gas_multiplayerCharacter, CharacterData);
+    DOREPLIFETIME(AAG_Character, CharacterData);
 }

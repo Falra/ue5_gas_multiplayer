@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "ue5_gas_multiplayerGameMode.generated.h"
+#include "AG_GameMode.generated.h"
 
 UCLASS(minimalapi)
-class Aue5_gas_multiplayerGameMode : public AGameModeBase
+class AAG_GameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
 public:
-	Aue5_gas_multiplayerGameMode();
+	AAG_GameMode();
 };
 
 

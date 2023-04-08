@@ -1,10 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "ue5_gas_multiplayerGameMode.h"
-#include "ue5_gas_multiplayerCharacter.h"
+#include "AG_GameMode.h"
+#include "AG_Character.h"
 #include "UObject/ConstructorHelpers.h"
 
-Aue5_gas_multiplayerGameMode::Aue5_gas_multiplayerGameMode()
+AAG_GameMode::AAG_GameMode()
 {
 	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));
