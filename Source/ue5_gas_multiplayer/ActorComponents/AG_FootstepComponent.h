@@ -21,10 +21,10 @@ protected:
     virtual void BeginPlay() override;
 
     UPROPERTY(EditDefaultsOnly)
-    FName LeftSocketName = TEXT("LeftFootSocket");
+    FName LeftSocketName = TEXT("foot_l_Socket");
     
     UPROPERTY(EditDefaultsOnly)
-    FName RightSocketName = TEXT("RightFootSocket");
+    FName RightSocketName = TEXT("foot_r_Socket");
 
 public:
     void HandleFootstep(EFoot Foot);
