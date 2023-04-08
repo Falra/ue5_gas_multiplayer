@@ -7,7 +7,7 @@
 #include "PhysicalMaterials/AG_PhysicalMaterial.h"
 
 static TAutoConsoleVariable<int32> CVarShowFootsteps(
-    TEXT("ShowDedugFootsteps"),
+    TEXT("ShowDebugFootsteps"),
     0,
     TEXT("Show debug footsteps"),
     ECVF_Cheat
@@ -48,7 +48,7 @@ void UAG_FootstepComponent::HandleFootstep(EFoot Foot)
     if (FHitResult HitResult; GetWorld()->LineTraceSingleByChannel(HitResult, Location,
         EndLocation, ECC_WorldStatic, QueryParams))
     {
-        if (HitResult.bBlockingHit)
+        if (!HitResult.bBlockingHit)
         {
             if (ShowFootsteps > 0)
             {
@@ -61,7 +61,7 @@ void UAG_FootstepComponent::HandleFootstep(EFoot Foot)
             UGameplayStatics::PlaySoundAtLocation(this, Material->FootstepSound, SocketLocation, 1.0f);
             if (ShowFootsteps > 0)
             {
-                DrawDebugString(GetWorld(), HitResult.ImpactPoint, *Material->GetName(), nullptr, FColor::White, 4.0f);
+                DrawDebugString(GetWorld(), HitResult.ImpactPoint, GetNameSafe(Material), nullptr, FColor::White, 4.0f);
             }
         }
         if (ShowFootsteps > 0)
