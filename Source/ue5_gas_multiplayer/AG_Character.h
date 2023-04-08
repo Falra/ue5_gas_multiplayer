@@ -9,6 +9,7 @@
 #include "InputActionValue.h"
 #include "AG_Character.generated.h"
 
+class UAG_FootstepComponent;
 class UAG_AbilitySystemComponentBase;
 class UAG_AttributeSetBase;
 
@@ -54,6 +55,8 @@ public:
     bool ApplyGameplayEffectToSelf(TSubclassOf<UGameplayEffect> Effect, FGameplayEffectContextHandle InEffectContext);
 
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+    UAG_FootstepComponent* GetFootstepComponent() const;
 protected:
     void GiveAbilities();
     void ApplyStartupEffects();

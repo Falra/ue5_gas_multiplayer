@@ -99,6 +99,11 @@ UAbilitySystemComponent* AAG_Character::GetAbilitySystemComponent() const
     return AbilitySystemComponent;
 }
 
+UAG_FootstepComponent* AAG_Character::GetFootstepComponent() const
+{
+    return FootstepComponent; 
+}
+
 void AAG_Character::GiveAbilities()
 {
     if (HasAuthority() && AbilitySystemComponent)
