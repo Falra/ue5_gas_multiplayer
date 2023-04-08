@@ -3,7 +3,7 @@
 
 #include "AnimInstances/AG_AnimInstance.h"
 
-#include "..\AG_Character.h"
+#include "../AG_Character.h"
 #include "DataAssets/CharacterAnimDataAsset.h"
 
 UBlendSpace* UAG_AnimInstance::GetLocomotionBlendSpace() const

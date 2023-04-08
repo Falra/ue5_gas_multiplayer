@@ -2,7 +2,7 @@
 
 #include "ActorComponents/AG_FootstepComponent.h"
 
-#include "..\AG_Character.h"
+#include "../AG_Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "PhysicalMaterials/AG_PhysicalMaterial.h"
 
