@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/Abilities/GA_Jump.h"
 
+#include "AbilitySystemComponent.h"
 #include "GameFramework/Character.h"
 
 UGA_Jump::UGA_Jump()
@@ -34,5 +35,21 @@ void UGA_Jump::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FG
 
         ACharacter * Character = CastChecked<ACharacter>(ActorInfo->AvatarActor.Get());
         Character->Jump();
+
+        auto* AbilitySystemComponent = ActorInfo->AbilitySystemComponent.Get();
+        if (!AbilitySystemComponent)
+        {
+            return;
+        }
+        const FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+        const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(JumpEffect, 1, EffectContext);
+        if (SpecHandle.IsValid())
+        {
+            const FActiveGameplayEffectHandle EffectHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+            if (!EffectHandle.IsValid() || !EffectHandle.WasSuccessfullyApplied())
+            {
+                UE_LOG(LogTemp, Error, TEXT("Failed to apply jump ability %s"), *GetNameSafe(Character));
+            }
+        }
     }
 }

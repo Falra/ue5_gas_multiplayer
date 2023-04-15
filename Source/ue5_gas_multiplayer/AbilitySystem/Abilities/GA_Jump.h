@@ -6,9 +6,8 @@
 #include "AbilitySystem/Abilities/AG_GameplayAbility.h"
 #include "GA_Jump.generated.h"
 
-/**
- * 
- */
+class UGameplayEffect; 
+
 UCLASS()
 class UE5_GAS_MULTIPLAYER_API UGA_Jump : public UAG_GameplayAbility
 {
@@ -23,4 +22,9 @@ public:
 
     virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
         const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+protected:
+
+    UPROPERTY(EditDefaultsOnly, Category = "Effects")
+    TSubclassOf<UGameplayEffect> JumpEffect;
 };
