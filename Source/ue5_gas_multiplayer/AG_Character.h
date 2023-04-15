@@ -120,6 +120,8 @@ public:
     UFUNCTION(BlueprintCallable)
     void SetCharacterData(const FCharacterData& InCharacterData);
 
+    virtual void Landed(const FHitResult& Hit) override;
+    
 protected:
 
     UPROPERTY(ReplicatedUsing = OnRep_CharacterData)
@@ -138,4 +140,7 @@ protected:
 
     UPROPERTY(EditDefaultsOnly)
     FGameplayTag JumpTag;
+
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTagContainer InAirTags;
 };

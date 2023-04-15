@@ -310,6 +310,16 @@ void AAG_Character::SetCharacterData(const FCharacterData& InCharacterData)
     InitFromCharacterData(CharacterData);
 }
 
+void AAG_Character::Landed(const FHitResult& Hit)
+{
+    Super::Landed(Hit);
+
+    if (AbilitySystemComponent)
+    {
+        AbilitySystemComponent->RemoveActiveEffectsWithTags(InAirTags);
+    }
+}
+
 void AAG_Character::InitFromCharacterData(const FCharacterData& InCharacterData, bool bFromReplication)
 {
 }
