@@ -41,12 +41,24 @@ class AAG_Character : public ACharacter, public IAbilitySystemInterface
 
     /** Move Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-    class UInputAction* MoveAction;
+    UInputAction* MoveAction;
 
     /** Look Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-    class UInputAction* LookAction;
+    UInputAction* LookAction;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* MoveForwardAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* MoveSideAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* LookUpAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* TurnAction;
+    
 public:
     AAG_Character(const FObjectInitializer& ObjectInitializer);
 
@@ -76,6 +88,14 @@ protected:
     /** Called for looking input */
     void Look(const FInputActionValue& Value);
 
+    void MoveForward(const FInputActionValue& Value);
+
+    void MoveSide(const FInputActionValue& Value);
+
+    void Turn(const FInputActionValue& Value);
+
+    void LookUp(const FInputActionValue& Value);
+    
 protected:
     // APawn interface
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

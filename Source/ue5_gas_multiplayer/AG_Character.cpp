@@ -175,9 +175,15 @@ void AAG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 
         //Moving
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAG_Character::Move);
+        
+        EnhancedInputComponent->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &AAG_Character::MoveForward);
+        EnhancedInputComponent->BindAction(MoveSideAction, ETriggerEvent::Triggered, this, &AAG_Character::MoveSide);
 
         //Looking
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAG_Character::Look);
+        
+        EnhancedInputComponent->BindAction(LookUpAction, ETriggerEvent::Triggered, this, &AAG_Character::LookUp);
+        EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &AAG_Character::Turn);
 
     }
 
@@ -217,6 +223,22 @@ void AAG_Character::Look(const FInputActionValue& Value)
         AddControllerYawInput(LookAxisVector.X);
         AddControllerPitchInput(LookAxisVector.Y);
     }
+}
+
+void AAG_Character::MoveForward(const FInputActionValue& Value)
+{
+}
+
+void AAG_Character::MoveSide(const FInputActionValue& Value)
+{
+}
+
+void AAG_Character::Turn(const FInputActionValue& Value)
+{
+}
+
+void AAG_Character::LookUp(const FInputActionValue& Value)
+{
 }
 
 FCharacterData AAG_Character::GetCharacterData() const
