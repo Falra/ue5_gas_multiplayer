@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "AG_Character.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -170,8 +172,8 @@ void AAG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInput
     {
 
         //Jumping
-        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AAG_Character::OnJumpStarted);
+        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AAG_Character::OnJumpEnded);
 
         //Moving
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAG_Character::Move);
@@ -279,6 +281,21 @@ void AAG_Character::LookUp(const FInputActionValue& Value)
     {
         AddControllerPitchInput(LookAmount);
     }
+}
+
+void AAG_Character::OnJumpStarted(const FInputActionValue& Value)
+{
+    FGameplayEventData Payload;
+    
+    Payload.Instigator = this;
+    Payload.EventTag = JumpTag;
+
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, JumpTag, Payload);
+}
+
+void AAG_Character::OnJumpEnded(const FInputActionValue& Value)
+{
+    // StopJumping();
 }
 
 FCharacterData AAG_Character::GetCharacterData() const

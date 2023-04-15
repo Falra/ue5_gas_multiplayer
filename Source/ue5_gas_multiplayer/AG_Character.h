@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "ActionGameTypes.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "AG_Character.generated.h"
@@ -95,6 +96,10 @@ protected:
     void Turn(const FInputActionValue& Value);
 
     void LookUp(const FInputActionValue& Value);
+
+    void OnJumpStarted(const FInputActionValue& Value);
+
+    void OnJumpEnded(const FInputActionValue& Value);
     
 protected:
     // APawn interface
@@ -130,4 +135,7 @@ protected:
 
     UPROPERTY(BlueprintReadOnly)
     class UAG_FootstepComponent* FootstepComponent;
+
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTag JumpTag;
 };
