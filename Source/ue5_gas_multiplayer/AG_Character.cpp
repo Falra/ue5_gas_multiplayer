@@ -227,18 +227,58 @@ void AAG_Character::Look(const FInputActionValue& Value)
 
 void AAG_Character::MoveForward(const FInputActionValue& Value)
 {
+    const float MovementValue = Value.GetMagnitude();
+    
+    if (Controller != nullptr)
+    {
+        // find out which way is forward
+        const FRotator Rotation = Controller->GetControlRotation();
+        const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+        // get forward vector
+        const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+        // add movement 
+        AddMovementInput(ForwardDirection, MovementValue);
+    }
 }
 
 void AAG_Character::MoveSide(const FInputActionValue& Value)
 {
+    const float MovementValue = Value.GetMagnitude();
+    
+    if (Controller != nullptr)
+    {
+        // find out which way is forward
+        const FRotator Rotation = Controller->GetControlRotation();
+        const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+        // get right vector 
+        const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+        // add movement 
+        AddMovementInput(RightDirection, MovementValue);
+    }
 }
 
 void AAG_Character::Turn(const FInputActionValue& Value)
 {
+    const float TurnAmount = Value.GetMagnitude();
+    
+    if (Controller != nullptr)
+    {
+        AddControllerYawInput(TurnAmount);
+    }
 }
 
 void AAG_Character::LookUp(const FInputActionValue& Value)
 {
+    const float LookAmount = Value.GetMagnitude();
+    
+    if (Controller != nullptr)
+    {
+        AddControllerPitchInput(LookAmount);
+    }
 }
 
 FCharacterData AAG_Character::GetCharacterData() const
