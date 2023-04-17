@@ -24,4 +24,6 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, Category = "Effects")
     TArray<TSubclassOf<UGameplayEffect>> OngoingEffectsToJustApplyOnStart;
+
+    TArray<FActiveGameplayEffectHandle> RemoveOnEndEffectHandles;
 };
