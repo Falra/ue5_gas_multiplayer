@@ -82,6 +82,7 @@ void UAG_GameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, co
             }
             AbilitySystemComponent->RemoveActiveGameplayEffect(ActiveGEHandle);
         }
+        RemoveOnEndEffectHandles.Empty();
     }
     
     Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
