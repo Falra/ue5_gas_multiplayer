@@ -26,4 +26,7 @@ protected:
     TArray<TSubclassOf<UGameplayEffect>> OngoingEffectsToJustApplyOnStart;
 
     TArray<FActiveGameplayEffectHandle> RemoveOnEndEffectHandles;
+
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    class AAG_Character* GetActionGameCharacterFromActorInfo() const;
 };

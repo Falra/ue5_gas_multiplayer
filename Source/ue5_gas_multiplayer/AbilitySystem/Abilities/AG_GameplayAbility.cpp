@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemLog.h"
+#include "AG_Character.h"
 
 void UAG_GameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
     const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
@@ -70,4 +71,9 @@ void UAG_GameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, co
     }
     
     Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+AAG_Character* UAG_GameplayAbility::GetActionGameCharacterFromActorInfo() const
+{
+    return Cast<AAG_Character>(GetAvatarActorFromActorInfo());
 }
