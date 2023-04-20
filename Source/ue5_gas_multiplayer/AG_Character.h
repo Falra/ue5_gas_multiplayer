@@ -40,6 +40,10 @@ class AAG_Character : public ACharacter, public IAbilitySystemInterface
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     class UInputAction* JumpAction;
 
+    /** Crouch Input Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* CrouchAction;
+    
     /** Move Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* MoveAction;
@@ -100,6 +104,10 @@ protected:
     void OnJumpStarted(const FInputActionValue& Value);
 
     void OnJumpEnded(const FInputActionValue& Value);
+
+    void OnCrouchStarted(const FInputActionValue& Value);
+
+    void OnCrouchEnded(const FInputActionValue& Value);
     
 protected:
     // APawn interface
@@ -143,4 +151,7 @@ protected:
 
     UPROPERTY(EditDefaultsOnly)
     FGameplayTagContainer InAirTags;
+
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTagContainer CrouchTags;
 };

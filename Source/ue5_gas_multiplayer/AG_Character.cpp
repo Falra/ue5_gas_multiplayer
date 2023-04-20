@@ -175,6 +175,10 @@ void AAG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInput
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AAG_Character::OnJumpStarted);
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AAG_Character::OnJumpEnded);
 
+        //Crouch
+        EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAG_Character::OnCrouchStarted);
+        EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAG_Character::OnCrouchEnded);
+        
         //Moving
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAG_Character::Move);
         
@@ -296,6 +300,22 @@ void AAG_Character::OnJumpStarted(const FInputActionValue& Value)
 void AAG_Character::OnJumpEnded(const FInputActionValue& Value)
 {
     // StopJumping();
+}
+
+void AAG_Character::OnCrouchStarted(const FInputActionValue& Value)
+{
+    if (AbilitySystemComponent)
+    {
+        AbilitySystemComponent->TryActivateAbilitiesByTag(CrouchTags, true);
+    }
+}
+
+void AAG_Character::OnCrouchEnded(const FInputActionValue& Value)
+{
+    if (AbilitySystemComponent)
+    {
+        AbilitySystemComponent->CancelAbilities(&CrouchTags);
+    }
 }
 
 FCharacterData AAG_Character::GetCharacterData() const
