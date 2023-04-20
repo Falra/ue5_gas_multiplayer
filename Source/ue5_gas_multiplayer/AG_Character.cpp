@@ -340,6 +340,37 @@ void AAG_Character::Landed(const FHitResult& Hit)
     }
 }
 
+void AAG_Character::OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust)
+{
+    Super::OnStartCrouch(HalfHeightAdjust, ScaledHalfHeightAdjust);
+
+    if (!AbilitySystemComponent || !CrouchStateEffect.Get())
+    {
+        return;
+    }
+    const FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+    FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(CrouchStateEffect, 1, EffectContext);
+    if (!SpecHandle.IsValid())
+    {
+        return;;
+    }
+    FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+    if (!ActiveGEHandle.WasSuccessfullyApplied())
+    {
+        UE_LOG(LogTemp, Log, TEXT("Ability %s failed to apply startup effect %s"), *GetName(), *GetNameSafe(CrouchStateEffect));
+    }
+}
+
+void AAG_Character::OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust)
+{
+    if (AbilitySystemComponent && CrouchStateEffect.Get())
+    {
+        AbilitySystemComponent->RemoveActiveGameplayEffectBySourceEffect(CrouchStateEffect, AbilitySystemComponent);
+    }
+    
+    Super::OnEndCrouch(HalfHeightAdjust, ScaledHalfHeightAdjust);
+}
+
 void AAG_Character::InitFromCharacterData(const FCharacterData& InCharacterData, bool bFromReplication)
 {
 }

@@ -129,7 +129,10 @@ public:
     void SetCharacterData(const FCharacterData& InCharacterData);
 
     virtual void Landed(const FHitResult& Hit) override;
-    
+
+    virtual void OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
+
+    virtual void OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
 protected:
 
     UPROPERTY(ReplicatedUsing = OnRep_CharacterData)
@@ -154,4 +157,7 @@ protected:
 
     UPROPERTY(EditDefaultsOnly)
     FGameplayTagContainer CrouchTags;
+
+    UPROPERTY(EditDefaultsOnly)
+    TSubclassOf<UGameplayEffect> CrouchStateEffect;
 };
