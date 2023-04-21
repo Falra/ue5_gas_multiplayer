@@ -12,10 +12,22 @@ UBlendSpace* UAG_AnimInstance::GetLocomotionBlendSpace() const
     return MyCharacterAnimDataAsset ? MyCharacterAnimDataAsset->CharacterAnimData.MovementBlendSpace : nullptr;
 }
 
+UBlendSpace* UAG_AnimInstance::GetCrouchLocomotionBlendSpace() const
+{
+    const auto* MyCharacterAnimDataAsset = GetCharacterAnimDataAsset();
+    return MyCharacterAnimDataAsset ? MyCharacterAnimDataAsset->CharacterAnimData.CrouchBlendSpace : nullptr;
+}
+
 UAnimSequenceBase* UAG_AnimInstance::GetIdleAnimation() const
 {
     const auto* MyCharacterAnimDataAsset = GetCharacterAnimDataAsset();
     return MyCharacterAnimDataAsset ? MyCharacterAnimDataAsset->CharacterAnimData.IdleAnimationAsset : nullptr;
+}
+
+UAnimSequenceBase* UAG_AnimInstance::GetCrouchIdleAnimation() const
+{
+    const auto* MyCharacterAnimDataAsset = GetCharacterAnimDataAsset();
+    return MyCharacterAnimDataAsset ? MyCharacterAnimDataAsset->CharacterAnimData.CrouchIdleAnimationAsset : nullptr;
 }
 
 UCharacterAnimDataAsset* UAG_AnimInstance::GetCharacterAnimDataAsset() const
