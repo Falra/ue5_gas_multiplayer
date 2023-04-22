@@ -11,7 +11,8 @@
 			"AdditionalDependencies": [
 				"GameplayAbilities",
 				"Engine",
-				"PhysicsCore"
+				"PhysicsCore",
+				"MotionWarping"
 			]
 		}
 	],
