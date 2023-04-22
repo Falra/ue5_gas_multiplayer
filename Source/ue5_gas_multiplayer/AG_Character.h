@@ -37,6 +37,9 @@ class AAG_Character : public ACharacter, public IAbilitySystemInterface
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     class UInputMappingContext* DefaultMappingContext;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = MotionWarp, meta = (AllowPrivateAccess = "true"))
+    class UAG_MotionWarpingComponent* MotionWarpingComponent;
+
     /** Jump Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     class UInputAction* JumpAction;
@@ -79,6 +82,8 @@ public:
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
     UAG_FootstepComponent* GetFootstepComponent() const;
+
+    UAG_MotionWarpingComponent* GetMotionWarpingComponent() const;
 
     void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& ChangeData);
     

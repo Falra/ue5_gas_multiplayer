@@ -16,6 +16,7 @@
 #include "AbilitySystem/Components/AG_AbilitySystemComponentBase.h"
 #include "ActorComponents/AG_CharacterMovementComponent.h"
 #include "ActorComponents/AG_FootstepComponent.h"
+#include "ActorComponents/AG_MotionWarpingComponent.h"
 #include "DataAssets/CharacterDataAsset.h"
 #include "Net/UnrealNetwork.h"
 
@@ -70,6 +71,8 @@ AAG_Character::AAG_Character(const FObjectInitializer& ObjectInitializer)
     FootstepComponent = CreateDefaultSubobject<UAG_FootstepComponent>(TEXT("FootstepComponent"));
     AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxMovementSpeedAttribute()).AddUObject(this,
         &AAG_Character::OnMaxMovementSpeedChanged);
+
+    MotionWarpingComponent = CreateDefaultSubobject<UAG_MotionWarpingComponent>(TEXT("MotionWarpingComponent"));
 }
 
 void AAG_Character::PostInitializeComponents()
@@ -106,6 +109,11 @@ UAbilitySystemComponent* AAG_Character::GetAbilitySystemComponent() const
 UAG_FootstepComponent* AAG_Character::GetFootstepComponent() const
 {
     return FootstepComponent; 
+}
+
+UAG_MotionWarpingComponent* AAG_Character::GetMotionWarpingComponent() const
+{
+    return MotionWarpingComponent;
 }
 
 void AAG_Character::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& ChangeData)
