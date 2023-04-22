@@ -309,12 +309,14 @@ void AAG_Character::LookUp(const FInputActionValue& Value)
 
 void AAG_Character::OnJumpStarted(const FInputActionValue& Value)
 {
-    FGameplayEventData Payload;
-    
-    Payload.Instigator = this;
-    Payload.EventTag = JumpTag;
+    // FGameplayEventData Payload;
+    //
+    // Payload.Instigator = this;
+    // Payload.EventTag = JumpTag;
+    //
+    // UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, JumpTag, Payload);
 
-    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, JumpTag, Payload);
+    AGCharacterMovementComponent->TryTraversal(AbilitySystemComponent);
 }
 
 void AAG_Character::OnJumpEnded(const FInputActionValue& Value)
