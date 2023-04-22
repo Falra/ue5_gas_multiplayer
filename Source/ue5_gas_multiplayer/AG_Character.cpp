@@ -179,15 +179,15 @@ void AAG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInput
     {
 
         //Jumping
-        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AAG_Character::OnJumpStarted);
+        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AAG_Character::OnJumpStarted);
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AAG_Character::OnJumpEnded);
 
         //Crouch
-        EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAG_Character::OnCrouchStarted);
+        EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AAG_Character::OnCrouchStarted);
         EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAG_Character::OnCrouchEnded);
 
         //Sprint
-        EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AAG_Character::OnSprintStarted);
+        EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AAG_Character::OnSprintStarted);
         EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAG_Character::OnSprintEnded);
         
         //Moving
