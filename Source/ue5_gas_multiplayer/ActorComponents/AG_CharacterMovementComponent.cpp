@@ -5,6 +5,15 @@
 
 #include "AbilitySystemComponent.h"
 
+static TAutoConsoleVariable<int32> CVarShowTraversal(
+    TEXT("AbilitySystem.ShowDebug   Traversal"),
+    0,
+    TEXT("Draw debug info aabout traversal")
+    TEXT("0: off\n")
+    TEXT("1: on\n"),
+    ECVF_Cheat
+    );
+
 bool UAG_CharacterMovementComponent::TryTraversal(UAbilitySystemComponent* AbilitySystemComponent)
 {
     for (const auto AbilityClass : TraversalAbilitiesOrdered)
