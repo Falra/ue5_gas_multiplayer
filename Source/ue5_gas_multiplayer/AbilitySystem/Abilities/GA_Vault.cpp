@@ -3,6 +3,9 @@
 
 #include "AbilitySystem/Abilities/GA_Vault.h"
 
+#include "AG_Character.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 UGA_Vault::UGA_Vault()
 {
     NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
@@ -12,7 +15,27 @@ UGA_Vault::UGA_Vault()
 bool UGA_Vault::CommitCheck(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
     const FGameplayAbilityActivationInfo ActivationInfo, FGameplayTagContainer* OptionalRelevantTags)
 {
-    return Super::CommitCheck(Handle, ActorInfo, ActivationInfo, OptionalRelevantTags);
+    if (!Super::CommitCheck(Handle, ActorInfo, ActivationInfo, OptionalRelevantTags))
+    {
+        return false;
+    }
+    auto* Character = GetActionGameCharacterFromActorInfo();
+    if (!IsValid(Character))
+    {
+        return false;
+    }
+    const FVector StartLocation = Character->GetActorLocation();
+    const FVector ForwardVector = Character->GetActorForwardVector();
+    const FVector UpVector = Character->GetActorUpVector();
+    
+    TArray<AActor*> ActorsToIgnore {Character};
+
+    static const auto* CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("AbilitySystem.ShowDebugTraversal"));
+    const bool bShowTraversal = CVar->GetInt() > 0;
+
+    EDrawDebugTrace::Type DrawDebugType = bShowTraversal ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
+    
+    return true;
 }
 
 void UGA_Vault::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

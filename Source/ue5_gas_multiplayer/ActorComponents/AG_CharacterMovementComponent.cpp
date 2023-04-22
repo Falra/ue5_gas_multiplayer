@@ -6,7 +6,7 @@
 #include "AbilitySystemComponent.h"
 
 static TAutoConsoleVariable<int32> CVarShowTraversal(
-    TEXT("AbilitySystem.ShowDebug   Traversal"),
+    TEXT("AbilitySystem.ShowDebugTraversal"),
     0,
     TEXT("Draw debug info aabout traversal")
     TEXT("0: off\n")
