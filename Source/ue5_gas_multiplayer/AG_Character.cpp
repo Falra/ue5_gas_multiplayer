@@ -68,6 +68,8 @@ AAG_Character::AAG_Character(const FObjectInitializer& ObjectInitializer)
 
     AttributeSet = CreateDefaultSubobject<UAG_AttributeSetBase>(TEXT("AttributeSet"));
     FootstepComponent = CreateDefaultSubobject<UAG_FootstepComponent>(TEXT("FootstepComponent"));
+    AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxMovementSpeedAttribute()).AddUObject(this,
+        &AAG_Character::OnMaxMovementSpeedChanged);
 }
 
 void AAG_Character::PostInitializeComponents()
@@ -104,6 +106,11 @@ UAbilitySystemComponent* AAG_Character::GetAbilitySystemComponent() const
 UAG_FootstepComponent* AAG_Character::GetFootstepComponent() const
 {
     return FootstepComponent; 
+}
+
+void AAG_Character::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& ChangeData)
+{
+    GetCharacterMovement()->MaxWalkSpeed = ChangeData.NewValue;
 }
 
 void AAG_Character::GiveAbilities()

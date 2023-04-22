@@ -18,6 +18,7 @@ class UGameplayEffect;
 class UGameplayAbility;
 
 struct FGameplayEffectContextHandle;
+struct FOnAttributeChangeData;
 
 UCLASS(config=Game)
 class AAG_Character : public ACharacter, public IAbilitySystemInterface
@@ -78,6 +79,9 @@ public:
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
     UAG_FootstepComponent* GetFootstepComponent() const;
+
+    void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& ChangeData);
+    
 protected:
     void GiveAbilities();
     void ApplyStartupEffects();
@@ -171,4 +175,6 @@ protected:
 
     UPROPERTY(EditDefaultsOnly)
     TSubclassOf<UGameplayEffect> CrouchStateEffect;
+
+    FDelegateHandle MaxMovementSpeedDelegateHandle;
 };
