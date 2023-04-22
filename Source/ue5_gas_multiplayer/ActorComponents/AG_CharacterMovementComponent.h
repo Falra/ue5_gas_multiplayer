@@ -6,6 +6,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AG_CharacterMovementComponent.generated.h"
 
+class UGameplayAbility;
+class UAbilitySystemComponent;
 /**
  * 
  */
@@ -14,4 +16,12 @@ class UE5_GAS_MULTIPLAYER_API UAG_CharacterMovementComponent : public UCharacter
 {
     GENERATED_BODY()
 
+public:
+
+    bool TryTraversal(UAbilitySystemComponent* AbilitySystemComponent);
+
+protected:
+
+    UPROPERTY(EditDefaultsOnly)
+    TArray<TSubclassOf<UGameplayAbility>> TraversalAbilitiesOrdered; 
 };
