@@ -46,6 +46,7 @@ AAG_Character::AAG_Character(const FObjectInitializer& ObjectInitializer)
     GetCharacterMovement()->MaxWalkSpeed = 500.f;
     GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
     GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+    AGCharacterMovementComponent = Cast<UAG_CharacterMovementComponent>(GetCharacterMovement());
 
     // Create a camera boom (pulls in towards the player if there is a collision)
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));

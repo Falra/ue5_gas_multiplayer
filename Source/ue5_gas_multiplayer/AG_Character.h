@@ -40,6 +40,9 @@ class AAG_Character : public ACharacter, public IAbilitySystemInterface
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = MotionWarp, meta = (AllowPrivateAccess = "true"))
     class UAG_MotionWarpingComponent* MotionWarpingComponent;
 
+    UPROPERTY()
+    class UAG_CharacterMovementComponent* AGCharacterMovementComponent;
+
     /** Jump Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     class UInputAction* JumpAction;
