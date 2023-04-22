@@ -43,6 +43,10 @@ class AAG_Character : public ACharacter, public IAbilitySystemInterface
     /** Crouch Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* CrouchAction;
+
+    /** Sprint Input Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* SprintAction;
     
     /** Move Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -108,6 +112,10 @@ protected:
     void OnCrouchStarted(const FInputActionValue& Value);
 
     void OnCrouchEnded(const FInputActionValue& Value);
+
+    void OnSprintStarted(const FInputActionValue& Value);
+
+    void OnSprintEnded(const FInputActionValue& Value);
     
 protected:
     // APawn interface
@@ -157,6 +165,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly)
     FGameplayTagContainer CrouchTags;
+
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTagContainer SprintTags;
 
     UPROPERTY(EditDefaultsOnly)
     TSubclassOf<UGameplayEffect> CrouchStateEffect;

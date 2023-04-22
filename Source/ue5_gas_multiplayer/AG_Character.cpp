@@ -178,6 +178,10 @@ void AAG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInput
         //Crouch
         EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &AAG_Character::OnCrouchStarted);
         EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AAG_Character::OnCrouchEnded);
+
+        //Sprint
+        EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AAG_Character::OnSprintStarted);
+        EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AAG_Character::OnSprintEnded);
         
         //Moving
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAG_Character::Move);
@@ -315,6 +319,22 @@ void AAG_Character::OnCrouchEnded(const FInputActionValue& Value)
     if (AbilitySystemComponent)
     {
         AbilitySystemComponent->CancelAbilities(&CrouchTags);
+    }
+}
+
+void AAG_Character::OnSprintStarted(const FInputActionValue& Value)
+{
+    if (AbilitySystemComponent)
+    {
+        AbilitySystemComponent->TryActivateAbilitiesByTag(SprintTags, true);
+    }
+}
+
+void AAG_Character::OnSprintEnded(const FInputActionValue& Value)
+{
+    if (AbilitySystemComponent)
+    {
+        AbilitySystemComponent->CancelAbilities(&SprintTags);
     }
 }
 
