@@ -89,7 +89,7 @@ bool UGA_Vault::CommitCheck(const FGameplayAbilitySpecHandle Handle, const FGame
     for (; TraceIndex <= VerticalTraceCount; ++TraceIndex)
     {
         const FVector TraceStart = VerticalStartLocation + TraceIndex * ForwardVector * VerticalTraceStep;
-        const FVector TraceEnd = TraceStart + UpVector * VerticalTraceLength *-1.f;
+        const FVector TraceEnd = TraceStart + UpVector * VerticalTraceLength * -1.f;
         if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, TraceStart, TraceEnd, VerticalTraceRadius,
             TraceObjectTypes, true, ActorsToIgnore, DrawDebugType, TraceHit, true))
         {
@@ -109,6 +109,19 @@ bool UGA_Vault::CommitCheck(const FGameplayAbilitySpecHandle Handle, const FGame
     {
         return false;
     }
+
+    const FVector TraceStart = JumpOverLocation + ForwardVector * VerticalTraceStep;
+    if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, TraceStart, JumpOverLocation, VerticalTraceRadius,
+            TraceObjectTypes, true, ActorsToIgnore, DrawDebugType, TraceHit, true))
+    {
+        JumpOverLocation = TraceHit.ImpactPoint;
+    }
+    if (bShowTraversal)
+    {
+        DrawDebugSphere(GetWorld(), JumpToLocation, 15.0f, 16, FColor::White, false, 7.0f);
+        DrawDebugSphere(GetWorld(), JumpOverLocation, 15.0f, 16, FColor::White, false, 7.0f);
+    }
+    
     return true;
 }
 
