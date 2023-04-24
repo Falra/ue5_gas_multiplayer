@@ -45,8 +45,8 @@ bool UGA_Vault::CommitCheck(const FGameplayAbilitySpecHandle Handle, const FGame
         const FVector TraceStart = StartLocation + TraceIndex * UpVector * HorizontalTraceStep;
         const FVector TraceEnd = TraceStart + ForwardVector * HorizontalTraceLength;
 
-        if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, TraceStart, TraceEnd, HorizontalTraceRadius, TraceObjectTypes, true,
-            ActorsToIgnore, DrawDebugType, TraceHit, true))
+        if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, TraceStart, TraceEnd, HorizontalTraceRadius,
+            TraceObjectTypes, true, ActorsToIgnore, DrawDebugType, TraceHit, true))
         {
             if (JumpToLocationIndex == INDEX_NONE && (TraceIndex < HorizontalTraceCount - 1))
             {
@@ -68,6 +68,44 @@ bool UGA_Vault::CommitCheck(const FGameplayAbilitySpecHandle Handle, const FGame
         }
     }
     if (JumpToLocationIndex == INDEX_NONE)
+    {
+        return false;
+    }
+    const float DistanceToJumpTo = FVector::Dist2D(StartLocation, JumpToLocation);
+    const float MaxVerticalTraceDistance = MaxJumpDistance - DistanceToJumpTo;
+    if (MaxVerticalTraceDistance < 0.f)
+    {
+        return false;
+    }
+    if (TraceIndex == HorizontalTraceCount)
+    {
+        TraceIndex = HorizontalTraceCount - 1;
+    }
+    const float VerticalTraceLength = FMath::Abs(JumpToLocation.Z - (StartLocation + TraceIndex * UpVector * HorizontalTraceStep).Z);
+    FVector VerticalStartLocation = JumpToLocation + UpVector * VerticalTraceLength;
+    TraceIndex = 0;
+    const float VerticalTraceCount = MaxVerticalTraceDistance / VerticalTraceStep;
+    bool bJumpOverLocationSet = false;
+    for (; TraceIndex <= VerticalTraceCount; ++TraceIndex)
+    {
+        const FVector TraceStart = VerticalStartLocation + TraceIndex * ForwardVector * VerticalTraceStep;
+        const FVector TraceEnd = TraceStart + UpVector * VerticalTraceLength *-1.f;
+        if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, TraceStart, TraceEnd, VerticalTraceRadius,
+            TraceObjectTypes, true, ActorsToIgnore, DrawDebugType, TraceHit, true))
+        {
+            JumpOverLocation = TraceHit.ImpactPoint;
+            if (TraceIndex == 0)
+            {
+                JumpToLocation = JumpOverLocation;
+            }
+        }
+        else if (TraceIndex != 0)
+        {
+            bJumpOverLocationSet = true;
+            break;
+        }
+    }
+    if (!bJumpOverLocationSet)
     {
         return false;
     }
