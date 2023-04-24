@@ -54,7 +54,7 @@ protected:
     UPROPERTY(Transient)
     class UAbilityTask_PlayMontageAndWait* VaultMontageTask = nullptr;
     
-    FVector JumpLocation;
+    FVector JumpToLocation;
     FVector JumpOverLocation;
     
     UPROPERTY(EditDefaultsOnly)

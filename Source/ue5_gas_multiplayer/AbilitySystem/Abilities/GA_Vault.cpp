@@ -34,7 +34,43 @@ bool UGA_Vault::CommitCheck(const FGameplayAbilitySpecHandle Handle, const FGame
     const bool bShowTraversal = CVar->GetInt() > 0;
 
     EDrawDebugTrace::Type DrawDebugType = bShowTraversal ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
-    
+
+    bool bJumpToLocationSet = false;
+    int32 JumpToLocationIndex = INDEX_NONE;
+    uint8 TraceIndex = 0;
+    FHitResult TraceHit;
+    float MaxJumpDistance = HorizontalTraceLength;
+    for (; TraceIndex < HorizontalTraceCount; ++TraceIndex)
+    {
+        const FVector TraceStart = StartLocation + TraceIndex * UpVector * HorizontalTraceStep;
+        const FVector TraceEnd = TraceStart + ForwardVector * HorizontalTraceLength;
+
+        if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, TraceStart, TraceEnd, HorizontalTraceRadius, TraceObjectTypes, true,
+            ActorsToIgnore, DrawDebugType, TraceHit, true))
+        {
+            if (JumpToLocationIndex == INDEX_NONE && (TraceIndex < HorizontalTraceCount - 1))
+            {
+                JumpToLocationIndex = TraceIndex;
+                JumpToLocation = TraceHit.Location;
+            }
+            else if (JumpToLocationIndex == (TraceIndex - 1))
+            {
+                MaxJumpDistance = FVector::Dist2D(TraceHit.Location, TraceStart);
+                break;
+            }
+        }
+        else
+        {
+            if (JumpToLocationIndex != INDEX_NONE)
+            {
+                break;
+            }
+        }
+    }
+    if (JumpToLocationIndex == INDEX_NONE)
+    {
+        return false;
+    }
     return true;
 }
 
