@@ -4,6 +4,8 @@
 #include "AbilitySystem/Abilities/GA_Vault.h"
 
 #include "AG_Character.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 UGA_Vault::UGA_Vault()
@@ -129,6 +131,25 @@ void UGA_Vault::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
     const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+    
+    if (!CommitAbility(Handle, ActorInfo, ActivationInfo))
+    {
+        K2_EndAbility();
+        return;
+    }
+    const auto* Character = GetActionGameCharacterFromActorInfo();
+    if (UCharacterMovementComponent* CharacterMovement = Character ? Character->GetCharacterMovement() : nullptr)
+    {
+        CharacterMovement->SetMovementMode(MOVE_Flying);
+    }
+
+    if (UCapsuleComponent* CapsuleComponent = Character ? Character->GetCapsuleComponent() : nullptr)
+    {
+        for (const ECollisionChannel CollisionChannel : CollisionChannelsToIgnore)
+        {
+            CapsuleComponent->SetCollisionResponseToChannel(CollisionChannel, ECollisionResponse::ECR_Ignore);
+        }
+    }
 }
 
 void UGA_Vault::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
