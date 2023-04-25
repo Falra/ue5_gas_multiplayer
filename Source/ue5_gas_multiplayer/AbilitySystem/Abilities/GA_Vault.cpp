@@ -4,6 +4,9 @@
 #include "AbilitySystem/Abilities/GA_Vault.h"
 
 #include "AG_Character.h"
+#include "Abilities/Tasks/AbilityTask.h"
+#include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+#include "ActorComponents/AG_MotionWarpingComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -150,10 +153,50 @@ void UGA_Vault::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
             CapsuleComponent->SetCollisionResponseToChannel(CollisionChannel, ECollisionResponse::ECR_Ignore);
         }
     }
+
+    if (UAG_MotionWarpingComponent* MotionWarping = Character ? Character->GetMotionWarpingComponent() : nullptr)
+    {
+        MotionWarping->AddOrUpdateWarpTargetFromLocationAndRotation(TEXT("JumpToLocation"), JumpToLocation, Character->GetActorRotation());
+        MotionWarping->AddOrUpdateWarpTargetFromLocationAndRotation(TEXT("JumpOverLocation"), JumpOverLocation, Character->GetActorRotation());
+    }
+    VaultMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, VaultMontage);
+    VaultMontageTask->OnBlendOut.AddDynamic(this, &UGA_Vault::K2_EndAbility);
+    VaultMontageTask->OnInterrupted.AddDynamic(this, &UGA_Vault::K2_EndAbility);
+    VaultMontageTask->OnCancelled.AddDynamic(this, &UGA_Vault::K2_EndAbility);
+    VaultMontageTask->OnCompleted.AddDynamic(this, &UGA_Vault::K2_EndAbility);
+    VaultMontageTask->ReadyForActivation();
 }
 
 void UGA_Vault::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
     const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+    if (IsValid(VaultMontageTask))
+    {
+        VaultMontageTask->EndTask();
+        VaultMontageTask = nullptr;
+    }
+
+    const auto* Character = GetActionGameCharacterFromActorInfo();
+
+    if (UCharacterMovementComponent* CharacterMovement = Character ? Character->GetCharacterMovement() : nullptr;
+        CharacterMovement && CharacterMovement->IsFlying())
+    {
+        CharacterMovement->SetMovementMode(MOVE_Falling);
+    }
+    
+    if (UCapsuleComponent* CapsuleComponent = Character ? Character->GetCapsuleComponent() : nullptr)
+    {
+        for (const ECollisionChannel CollisionChannel : CollisionChannelsToIgnore)
+        {
+            CapsuleComponent->SetCollisionResponseToChannel(CollisionChannel, ECollisionResponse::ECR_Block);
+        }
+    }
+
+    if (UAG_MotionWarpingComponent* MotionWarping = Character ? Character->GetMotionWarpingComponent() : nullptr)
+    {
+        MotionWarping->RemoveWarpTarget(TEXT("JumpToLocation"));
+        MotionWarping->RemoveWarpTarget(TEXT("JumpOverLocation"));
+    }
+    
     Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
