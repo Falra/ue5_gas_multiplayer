@@ -53,6 +53,28 @@ void UAbilityTask_WallRun::OnDestroy(bool bInOwnerFinished)
 void UAbilityTask_WallRun::TickTask(float DeltaTime)
 {
     Super::TickTask(DeltaTime);
+
+    FHitResult OnWallHit;
+    
+    if (!FindRunnableWall(OnWallHit))
+    {
+        if (ShouldBroadcastAbilityTaskDelegates())
+        {
+            OnWallRunFinished.Broadcast();
+        }
+
+        EndTask();
+        return;
+    }
+
+    const FRotator DirectionRotator = IsWallOnTheLeftSide(OnWallHit) ? FRotator(0, -90, 0) : FRotator(0, 90, 0);
+    const FVector WallRunDirection = DirectionRotator.RotateVector(OnWallHit.ImpactNormal);
+    CharacterMovement->Velocity = WallRunDirection * 700.0f;
+    CharacterMovement->Velocity.Z = CharacterMovement->GetGravityZ() * DeltaTime;
+    CharacterOwner->SetActorRotation(WallRunDirection.Rotation());
+    CharacterMovement->SetPlaneConstraintEnabled(true);
+    CharacterMovement->SetPlaneConstraintOrigin(OnWallHit.ImpactPoint);
+    CharacterMovement->SetPlaneConstraintNormal(OnWallHit.ImpactNormal);
 }
 
 bool UAbilityTask_WallRun::FindRunnableWall(FHitResult& OnWallHit)
