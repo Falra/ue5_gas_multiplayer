@@ -24,8 +24,6 @@ void UAbilityTask_WallRun::Activate()
     Super::Activate();
 
     FHitResult OnWallHit;
-    // const FVector CurrentAcceleration = CharacterMovement->GetCurrentAcceleration();
-
     if (!FindRunnableWall(OnWallHit))
     {
         if (ShouldBroadcastAbilityTaskDelegates())
@@ -122,5 +120,5 @@ bool UAbilityTask_WallRun::FindRunnableWall(FHitResult& OnWallHit)
 
 bool UAbilityTask_WallRun::IsWallOnTheLeftSide(const FHitResult& InWallHit) const
 {
-    return false;
+    return FVector::DotProduct(CharacterOwner->GetActorRightVector(), InWallHit.ImpactNormal) > 0.0f;
 }
