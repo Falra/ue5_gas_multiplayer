@@ -3,8 +3,10 @@
 
 #include "AbilityTask_WallRun.h"
 
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 UAbilityTask_WallRun* UAbilityTask_WallRun::CreateWallRunTask(UGameplayAbility* OwningAbility, ACharacter* InCharacterOwner,
     UCharacterMovementComponent* InCharacterMovement, TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes)
@@ -79,6 +81,42 @@ void UAbilityTask_WallRun::TickTask(float DeltaTime)
 
 bool UAbilityTask_WallRun::FindRunnableWall(FHitResult& OnWallHit)
 {
+    const FVector CharacterLocation = CharacterOwner->GetActorLocation();
+    const FVector RightVector = CharacterOwner->GetActorRightVector();
+    const FVector ForwardVector = CharacterOwner->GetActorForwardVector();
+    const float TraceLength = CharacterOwner->GetCapsuleComponent()->GetScaledCapsuleRadius() + 30.0f;
+
+    const TArray<AActor*> IgnoreActors {CharacterOwner};
+
+    static const auto* CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("AbilitySystem.ShowDebugTraversal"));
+    const bool bShowTraversal = CVar->GetInt() > 0;
+
+    const EDrawDebugTrace::Type DrawDebugType = bShowTraversal ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
+
+    if (UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), CharacterLocation, CharacterLocation + ForwardVector * TraceLength,
+        WallRun_TraceObjectTypes, true, IgnoreActors, DrawDebugType, OnWallHit, true))
+    {
+        return false;
+    }
+
+    if (UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), CharacterLocation, CharacterLocation + -RightVector * TraceLength,
+        WallRun_TraceObjectTypes, true, IgnoreActors, DrawDebugType, OnWallHit, true))
+    {
+        if (FVector::DotProduct(OnWallHit.ImpactNormal, RightVector) > 0.3f)
+        {
+            return true;
+        }
+    }
+
+    if (UKismetSystemLibrary::LineTraceSingleForObjects(GetWorld(), CharacterLocation, CharacterLocation + RightVector * TraceLength,
+        WallRun_TraceObjectTypes, true, IgnoreActors, DrawDebugType, OnWallHit, true))
+    {
+        if (FVector::DotProduct(OnWallHit.ImpactNormal, -RightVector) > 0.3f)
+        {
+            return true;
+        }
+    }
+    
     return false;
 }
 
