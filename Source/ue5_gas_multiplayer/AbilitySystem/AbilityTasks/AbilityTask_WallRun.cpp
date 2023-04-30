@@ -9,7 +9,12 @@
 UAbilityTask_WallRun* UAbilityTask_WallRun::CreateWallRunTask(UGameplayAbility* OwningAbility, ACharacter* InCharacterOwner,
     UCharacterMovementComponent* InCharacterMovement, TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes)
 {
-    return nullptr;
+    auto* WallRunTask = NewAbilityTask<UAbilityTask_WallRun>(OwningAbility);
+    WallRunTask->CharacterOwner = InCharacterOwner;
+    WallRunTask->CharacterMovement = InCharacterMovement;
+    WallRunTask->WallRun_TraceObjectTypes = TraceObjectTypes;
+    WallRunTask->bTickingTask = true;
+    return WallRunTask;
 }
 
 void UAbilityTask_WallRun::Activate()
