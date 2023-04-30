@@ -36,5 +36,16 @@ public:
     virtual void TickTask(float DeltaTime) override;
 
 protected:
-    
+    UPROPERTY()
+    UCharacterMovementComponent* CharacterMovement = nullptr;
+
+    UPROPERTY()
+    ACharacter* CharacterOwner = nullptr;
+
+    UPROPERTY()
+    TArray<TEnumAsByte<EObjectTypeQuery>> WallRun_TraceObjectTypes;
+
+    bool FindRunnableWall(FHitResult& OnWallHit);
+
+    bool IsWallOnTheLeftSide(const FHitResult& InWallHit) const;
 };
