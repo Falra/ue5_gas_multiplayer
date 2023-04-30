@@ -44,6 +44,9 @@ void UAbilityTask_WallRun::Activate()
 
 void UAbilityTask_WallRun::OnDestroy(bool bInOwnerFinished)
 {
+    CharacterMovement->SetPlaneConstraintEnabled(false);
+    CharacterMovement->SetMovementMode(MOVE_Falling);
+    
     Super::OnDestroy(bInOwnerFinished);
 }
 
