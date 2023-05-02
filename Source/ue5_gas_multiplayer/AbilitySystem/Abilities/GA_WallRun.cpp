@@ -3,17 +3,44 @@
 
 #include "GA_WallRun.h"
 
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/Character.h"
+
 UGA_WallRun::UGA_WallRun()
 {
+    NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
+    InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
 void UGA_WallRun::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
     Super::OnGiveAbility(ActorInfo, Spec);
+
+    const auto* Character = Cast<ACharacter>(ActorInfo->AvatarActor);
+    if (!Character)
+    {
+        return;
+    }
+    auto* CapsuleComponent = Character->GetCapsuleComponent();
+    if (!CapsuleComponent)
+    {
+        return;
+    }
+    CapsuleComponent->OnComponentHit.AddDynamic(this, &UGA_WallRun::OnCapsuleComponentHit);
 }
 
 void UGA_WallRun::OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
+    if (ActorInfo)
+    {
+        if (const auto* Character = Cast<ACharacter>(ActorInfo->AvatarActor))
+        {
+            if (auto* CapsuleComponent = Character->GetCapsuleComponent())
+            {
+                CapsuleComponent->OnComponentHit.RemoveDynamic(this, &UGA_WallRun::OnCapsuleComponentHit);;
+            }
+        }
+    }
     Super::OnRemoveAbility(ActorInfo, Spec);
 }
 
