@@ -3,8 +3,10 @@
 
 #include "GA_WallRun.h"
 
+#include "AG_Character.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UGA_WallRun::UGA_WallRun()
 {
@@ -47,7 +49,13 @@ void UGA_WallRun::OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, co
 bool UGA_WallRun::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
     const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
-    return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+    if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
+    {
+        return false;
+    }
+
+    const auto* Character = GetActionGameCharacterFromActorInfo();
+    return Character && !Character->GetCharacterMovement()->IsMovingOnGround();
 }
 
 void UGA_WallRun::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
