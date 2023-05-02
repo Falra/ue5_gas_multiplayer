@@ -34,3 +34,12 @@ void UGA_WallRun::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGam
 {
     Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
+
+void UGA_WallRun::OnCapsuleComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+    FVector NormalImpulse, const FHitResult& Hit)
+{
+}
+
+void UGA_WallRun::OnWallSideDetermined(bool bLeftSide)
+{
+}
