@@ -93,4 +93,13 @@ void UGA_WallRun::OnCapsuleComponentHit(UPrimitiveComponent* HitComponent, AActo
 
 void UGA_WallRun::OnWallSideDetermined(bool bLeftSide)
 {
+    auto* Character = GetActionGameCharacterFromActorInfo();
+    const auto* AbilitySystemComponent = GetAbilitySystemComponentFromActorInfo();
+    if (!Character || !AbilitySystemComponent)
+    {
+        return;
+    }
+    const FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+    const auto EffectClass = bLeftSide ? WallRunLeftSideEffectClass : WallRunRightSideEffectClass;
+    Character->ApplyGameplayEffectToSelf(EffectClass, EffectContextHandle);
 }
