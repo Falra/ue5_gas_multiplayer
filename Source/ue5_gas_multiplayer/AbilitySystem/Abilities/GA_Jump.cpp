@@ -43,7 +43,19 @@ void UGA_Jump::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FG
 
         Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
         
-        ACharacter * Character = CastChecked<ACharacter>(ActorInfo->AvatarActor.Get());
-        Character->Jump();
+        auto* Character = CastChecked<ACharacter>(ActorInfo->AvatarActor.Get());
+        auto* AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Character);
+
+        if (AbilitySystemComponent && AbilitySystemComponent->HasMatchingGameplayTag(WallRunStateTag))
+        {
+            const FGameplayTagContainer WallRunTags(WallRunStateTag);
+            AbilitySystemComponent->CancelAbilities(&WallRunTags);
+            const FVector JumpOffVector = Character->GetCharacterMovement()->GetCurrentAcceleration().GetSafeNormal() + FVector::UpVector;
+            Character->LaunchCharacter(JumpOffVector * OffWallJumpStrength, true, true);
+        }
+        else
+        {
+            Character->Jump();
+        }
     }
 }
