@@ -70,7 +70,7 @@ void UAbilityTask_WallRun::TickTask(float DeltaTime)
     const FRotator DirectionRotator = IsWallOnTheLeftSide(OnWallHit) ? FRotator(0, -90, 0) : FRotator(0, 90, 0);
     const FVector WallRunDirection = DirectionRotator.RotateVector(OnWallHit.ImpactNormal);
     CharacterMovement->Velocity = WallRunDirection * 700.0f;
-    CharacterMovement->Velocity.Z = CharacterMovement->GetGravityZ() * DeltaTime;
+    CharacterMovement->Velocity.Z = 0; // CharacterMovement->GetGravityZ() * DeltaTime;
     CharacterOwner->SetActorRotation(WallRunDirection.Rotation());
     CharacterMovement->SetPlaneConstraintEnabled(true);
     CharacterMovement->SetPlaneConstraintOrigin(OnWallHit.ImpactPoint);
