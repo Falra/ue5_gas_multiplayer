@@ -77,6 +77,16 @@ void UGA_WallRun::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const
 void UGA_WallRun::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
     const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+    if (IsValid(WallRunTask))
+    {
+        WallRunTask->EndTask();
+    }
+    auto* AbilitySystemComponent = GetAbilitySystemComponentFromActorInfo();
+    if (AbilitySystemComponent)
+    {
+        AbilitySystemComponent->RemoveActiveGameplayEffectBySourceEffect(WallRunLeftSideEffectClass, AbilitySystemComponent);
+        AbilitySystemComponent->RemoveActiveGameplayEffectBySourceEffect(WallRunRightSideEffectClass, AbilitySystemComponent);
+    }
     Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
