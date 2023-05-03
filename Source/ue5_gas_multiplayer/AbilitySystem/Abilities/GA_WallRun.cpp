@@ -3,6 +3,7 @@
 
 #include "GA_WallRun.h"
 
+#include "AbilitySystemComponent.h"
 #include "AG_Character.h"
 #include "AbilitySystem/AbilityTasks/AbilityTask_WallRun.h"
 #include "Components/CapsuleComponent.h"
@@ -82,6 +83,12 @@ void UGA_WallRun::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGam
 void UGA_WallRun::OnCapsuleComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
     FVector NormalImpulse, const FHitResult& Hit)
 {
+    auto* AbilitySystemComponent = GetAbilitySystemComponentFromActorInfo();
+    if (!AbilitySystemComponent)
+    {
+        return;
+    }
+    AbilitySystemComponent->TryActivateAbility(GetCurrentAbilitySpec()->Handle);
 }
 
 void UGA_WallRun::OnWallSideDetermined(bool bLeftSide)
