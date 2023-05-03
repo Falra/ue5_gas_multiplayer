@@ -4,6 +4,7 @@
 #include "GA_WallRun.h"
 
 #include "AG_Character.h"
+#include "AbilitySystem/AbilityTasks/AbilityTask_WallRun.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -62,6 +63,14 @@ void UGA_WallRun::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const
     const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+    auto* Character = GetActionGameCharacterFromActorInfo();
+    auto* CharacterMovement = Character ? Character->GetCharacterMovement() : nullptr;
+    
+    WallRunTask = UAbilityTask_WallRun::CreateWallRunTask(this, Character, CharacterMovement, TraceObjectTypes);
+    WallRunTask->OnWallRunFinished.AddDynamic(this, &UGA_WallRun::K2_EndAbility);
+    WallRunTask->OnWallRunWallSideDetermined.AddDynamic(this, &UGA_WallRun::OnWallSideDetermined);
+    WallRunTask->ReadyForActivation();
 }
 
 void UGA_WallRun::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
