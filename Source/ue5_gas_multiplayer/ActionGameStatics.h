@@ -4,15 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "ActionGameTypes.h"
 #include "ActionGameStatics.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class UE5_GAS_MULTIPLAYER_API UActionGameStatics : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
 
+public:
 
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    static const UItemStaticData* GetItemStaticData(TSubclassOf<UItemStaticData> ItemDataClass);
 };
