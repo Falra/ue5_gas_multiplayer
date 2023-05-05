@@ -7,28 +7,30 @@
 #include "InventoryList.generated.h"
 
 class UInventoryItemInstance;
+class UItemStaticData;
 
 USTRUCT(BlueprintType)
 struct FInventoryListItem : public FFastArraySerializerItem
 {
     GENERATED_BODY()
-
-protected:
-
+    
     UPROPERTY()
     UInventoryItemInstance* ItemInstance = nullptr;
 };
 
-USTRUCT(USTRUCT)
+USTRUCT(BlueprintType)
 struct FInventoryList : public FFastArraySerializer
 {
     GENERATED_BODY()
 
-    bool NetDeltaSerialize(FNetDeltaSerializeInfo & DeltaParams)
+    bool NetDeltaSerialize(FNetDeltaSerializeInfo& DeltaParams)
     {
         return FastArrayDeltaSerialize<FInventoryListItem, FInventoryList>( Items, DeltaParams, *this );
     }
-    
+
+    void AddItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
+    void RemoveItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
+
 protected:
 
     UPROPERTY()

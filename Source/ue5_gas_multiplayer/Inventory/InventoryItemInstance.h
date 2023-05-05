@@ -14,6 +14,8 @@ class UE5_GAS_MULTIPLAYER_API UInventoryItemInstance : public UObject
     GENERATED_BODY()
 
 public:
+    virtual void Init(TSubclassOf<UItemStaticData> InItemStaticDataClass);
+    
     virtual bool IsSupportedForNetworking() const override { return true; }
 
     UPROPERTY(Replicated)

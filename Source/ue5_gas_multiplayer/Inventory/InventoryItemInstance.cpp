@@ -9,7 +9,13 @@ void UInventoryItemInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+    DOREPLIFETIME(UInventoryItemInstance, ItemStaticDataClass);
     DOREPLIFETIME(UInventoryItemInstance, bEquipped);
+}
+
+void UInventoryItemInstance::Init(TSubclassOf<UItemStaticData> InItemStaticDataClass)
+{
+    ItemStaticDataClass = InItemStaticDataClass;
 }
 
 void UInventoryItemInstance::OnRep_Equipped()
