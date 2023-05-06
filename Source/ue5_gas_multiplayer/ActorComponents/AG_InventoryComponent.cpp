@@ -28,9 +28,12 @@ void UAG_InventoryComponent::InitializeComponent()
 {
     Super::InitializeComponent();
 
-    for (const auto ItemClass : DefaultItems)
+    if (GetOwner()->HasAuthority())
     {
-        InventoryList.AddItem(ItemClass);
+        for (const auto ItemClass : DefaultItems)
+        {
+            InventoryList.AddItem(ItemClass);
+        }
     }
 }
 

@@ -8,7 +8,7 @@
 
 class UItemStaticData;
 
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class UE5_GAS_MULTIPLAYER_API UInventoryItemInstance : public UObject
 {
     GENERATED_BODY()

@@ -8,7 +8,7 @@
 #include "AG_InventoryComponent.generated.h"
 
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class UE5_GAS_MULTIPLAYER_API UAG_InventoryComponent : public UActorComponent
 {
     GENERATED_BODY()

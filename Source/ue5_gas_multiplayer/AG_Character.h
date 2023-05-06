@@ -172,7 +172,7 @@ protected:
     UPROPERTY(BlueprintReadOnly)
     UAG_FootstepComponent* FootstepComponent;
 
-    UPROPERTY(BlueprintReadOnly, Replicated)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Replicated)
     UAG_InventoryComponent* InventoryComponent;
 
     UPROPERTY(EditDefaultsOnly)
