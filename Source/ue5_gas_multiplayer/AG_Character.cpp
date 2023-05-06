@@ -426,4 +426,5 @@ void AAG_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AAG_Character, CharacterData);
+    DOREPLIFETIME(AAG_Character, InventoryComponent);
 }
