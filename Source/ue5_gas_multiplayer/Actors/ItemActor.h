@@ -16,6 +16,7 @@ class UE5_GAS_MULTIPLAYER_API AItemActor : public AActor
 public:
     AItemActor();
     virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+    void Init(UInventoryItemInstance* InItemInstance);
     
 protected:
     virtual void BeginPlay() override;
