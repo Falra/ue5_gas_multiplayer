@@ -4,6 +4,7 @@
 #include "InventoryItemInstance.h"
 
 #include "ActionGameStatics.h"
+#include "Actors/ItemActor.h"
 #include "Net/UnrealNetwork.h"
 
 void UInventoryItemInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -12,6 +13,7 @@ void UInventoryItemInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 
     DOREPLIFETIME(UInventoryItemInstance, ItemStaticDataClass);
     DOREPLIFETIME(UInventoryItemInstance, bEquipped);
+    DOREPLIFETIME(UInventoryItemInstance, ItemActor);
 }
 
 void UInventoryItemInstance::Init(TSubclassOf<UItemStaticData> InItemStaticDataClass)
@@ -26,12 +28,27 @@ const UItemStaticData* UInventoryItemInstance::GetItemStaticData() const
 
 void UInventoryItemInstance::OnRep_Equipped()
 {
-    if (bEquipped)
+
+}
+
+void UInventoryItemInstance::OnEquipped()
+{
+    UWorld* World = GetWorld();
+    if (!World)
     {
-        OnEquipped();
+        return;
     }
-    else
+    FTransform Transform;
+    ItemActor = World->SpawnActorDeferred<AItemActor>(GetItemStaticData()->ItemActorClass, Transform);
+    ItemActor->Init(this);
+    ItemActor->FinishSpawning(Transform);
+}
+
+void UInventoryItemInstance::OnUnequipped()
+{
+    if (IsValid(ItemActor))
     {
-        OnUnequipped();
+        ItemActor->Destroy();
+        ItemActor = nullptr;
     }
 }

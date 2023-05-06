@@ -6,6 +6,7 @@
 #include "UObject/Object.h"
 #include "InventoryItemInstance.generated.h"
 
+class AItemActor;
 class UItemStaticData;
 
 UCLASS(BlueprintType, Blueprintable)
@@ -30,6 +31,11 @@ public:
     UFUNCTION()
     void OnRep_Equipped();
 
-    virtual void OnEquipped() {}
-    virtual void OnUnequipped() {}
+    virtual void OnEquipped();
+    virtual void OnUnequipped();
+
+protected:
+
+    UPROPERTY(Replicated)
+    AItemActor* ItemActor;
 };
