@@ -47,6 +47,33 @@ void UAG_InventoryComponent::RemoveItem(TSubclassOf<UItemStaticData> InItemStati
     InventoryList.RemoveItem(InItemStaticDataClass);
 }
 
+void UAG_InventoryComponent::EquipItem(TSubclassOf<UItemStaticData> InItemStaticDataClass)
+{
+    if (!GetOwner()->HasAuthority())
+    {
+        return;
+    }
+    for (const auto& Item : InventoryList.GetItemsRef())
+    {
+        if (Item.ItemInstance->ItemStaticDataClass == InItemStaticDataClass)
+        {
+            Item.ItemInstance->OnEquipped();
+            CurrentItem = Item.ItemInstance;
+            break;
+        }
+    }
+}
+
+void UAG_InventoryComponent::UnequipItem()
+{
+    if (!GetOwner()->HasAuthority() || !IsValid(CurrentItem))
+    {
+        return;
+    }
+    CurrentItem->OnUnequipped();
+    CurrentItem = nullptr;
+}
+
 bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
     bool bWroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
@@ -86,4 +113,5 @@ void UAG_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(UAG_InventoryComponent, InventoryList);
+    DOREPLIFETIME(UAG_InventoryComponent, CurrentItem);
 }

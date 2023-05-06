@@ -27,6 +27,14 @@ public:
     UFUNCTION(BlueprintCallable)
     void RemoveItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
 
+    UFUNCTION(BlueprintCallable)
+    void EquipItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
+
+    UFUNCTION(BlueprintCallable)
+    void UnequipItem();
+
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    UInventoryItemInstance* GetEquippedItem() const { return CurrentItem; }
 protected:
     
     UPROPERTY(Replicated)
@@ -34,6 +42,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly)
     TArray<TSubclassOf<UItemStaticData>> DefaultItems;
+
+    UPROPERTY(Replicated)
+    UInventoryItemInstance* CurrentItem;
     
 public:
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
