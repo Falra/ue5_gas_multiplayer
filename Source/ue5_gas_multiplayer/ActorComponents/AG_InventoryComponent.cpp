@@ -37,6 +37,16 @@ void UAG_InventoryComponent::InitializeComponent()
     }
 }
 
+void UAG_InventoryComponent::AddItem(TSubclassOf<UItemStaticData> InItemStaticDataClass)
+{
+    InventoryList.AddItem(InItemStaticDataClass);
+}
+
+void UAG_InventoryComponent::RemoveItem(TSubclassOf<UItemStaticData> InItemStaticDataClass)
+{
+    InventoryList.RemoveItem(InItemStaticDataClass);
+}
+
 bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
     bool bWroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);

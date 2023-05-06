@@ -20,7 +20,13 @@ public:
     virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override; 
 
     virtual void InitializeComponent() override;
-    
+
+    UFUNCTION(BlueprintCallable)
+    void AddItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
+
+    UFUNCTION(BlueprintCallable)
+    void RemoveItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
+
 protected:
     
     UPROPERTY(Replicated)
