@@ -54,4 +54,7 @@ public:
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     FName ItemName;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    TSubclassOf<class AItemActor> ItemActorClass;
 };
