@@ -3,33 +3,45 @@
 
 #include "AG_InventoryComponent.h"
 
+#include "Engine/ActorChannel.h"
+#include "Inventory/InventoryItemInstance.h"
+#include "Net/UnrealNetwork.h"
 
-// Sets default values for this component's properties
 UAG_InventoryComponent::UAG_InventoryComponent()
 {
-    // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-    // off to improve performance if you don't need them.
     PrimaryComponentTick.bCanEverTick = true;
-
-    // ...
+    bWantsInitializeComponent = true;
+    SetIsReplicatedByDefault(true);
 }
 
-
-// Called when the game starts
-void UAG_InventoryComponent::BeginPlay()
+void UAG_InventoryComponent::InitializeComponent()
 {
-    Super::BeginPlay();
-
-    // ...
-    
+    Super::InitializeComponent();
 }
 
+bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+    bool bWroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-// Called every frame
+    for (FInventoryListItem& Item : InventoryList.GetItemsRef())
+    {
+        UInventoryItemInstance* ItemInstance = Item.ItemInstance;
+        if (IsValid(ItemInstance))
+        {
+            bWroteSomething |= Channel->ReplicateSubobject(ItemInstance, *Bunch, *RepFlags);
+        }
+    }
+    return bWroteSomething;
+}
+
 void UAG_InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-    // ...
 }
 
+void UAG_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(UAG_InventoryComponent, InventoryList);
+}

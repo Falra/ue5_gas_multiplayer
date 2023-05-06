@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Inventory/InventoryList.h"
 #include "AG_InventoryComponent.generated.h"
 
 
@@ -13,16 +14,16 @@ class UE5_GAS_MULTIPLAYER_API UAG_InventoryComponent : public UActorComponent
     GENERATED_BODY()
 
 public:
-    // Sets default values for this component's properties
     UAG_InventoryComponent();
 
 protected:
-    // Called when the game starts
-    virtual void BeginPlay() override;
+    virtual void InitializeComponent() override;
+    virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override; 
 
+    UPROPERTY(Replicated)
+    FInventoryList InventoryList;
+    
 public:
-    // Called every frame
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 
 };
