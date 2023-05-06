@@ -6,22 +6,27 @@
 #include "GameFramework/Actor.h"
 #include "ItemActor.generated.h"
 
+class UInventoryItemInstance;
+
 UCLASS()
 class UE5_GAS_MULTIPLAYER_API AItemActor : public AActor
 {
     GENERATED_BODY()
 
 public:
-    // Sets default values for this actor's properties
     AItemActor();
-
+    virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+    
 protected:
-    // Called when the game starts or when spawned
     virtual void BeginPlay() override;
-
+    
+    UPROPERTY(Replicated)
+    UInventoryItemInstance* ItemInstance;
+    
 public:
-    // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-
+    virtual void OnEquipped();
+    virtual void OnUnequipped();
+    virtual void OnDropped();
 };

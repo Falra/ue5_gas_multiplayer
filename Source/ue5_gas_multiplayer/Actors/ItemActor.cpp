@@ -3,26 +3,48 @@
 
 #include "ItemActor.h"
 
+#include "Engine/ActorChannel.h"
+#include "Inventory/InventoryItemInstance.h"
+#include "Net/UnrealNetwork.h"
 
-// Sets default values
 AItemActor::AItemActor()
 {
-    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
-
+    bReplicates = true;
 }
 
-// Called when the game starts or when spawned
 void AItemActor::BeginPlay()
 {
     Super::BeginPlay();
-    
 }
 
-// Called every frame
+bool AItemActor::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+    bool bWroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+    bWroteSomething |= Channel->ReplicateSubobject(ItemInstance, *Bunch, *RepFlags);
+    return bWroteSomething;
+}
+
 void AItemActor::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
 }
 
+void AItemActor::OnEquipped()
+{
+}
+
+void AItemActor::OnUnequipped()
+{
+}
+
+void AItemActor::OnDropped()
+{
+}
+
+void AItemActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AItemActor, ItemInstance);
+}

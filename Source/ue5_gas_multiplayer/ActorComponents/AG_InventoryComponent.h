@@ -14,12 +14,15 @@ class UE5_GAS_MULTIPLAYER_API UAG_InventoryComponent : public UActorComponent
     GENERATED_BODY()
 
 public:
+
     UAG_InventoryComponent();
 
-protected:
-    virtual void InitializeComponent() override;
     virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override; 
 
+    virtual void InitializeComponent() override;
+    
+protected:
+    
     UPROPERTY(Replicated)
     FInventoryList InventoryList;
 
