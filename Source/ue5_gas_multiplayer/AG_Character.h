@@ -11,6 +11,7 @@
 #include "AG_Character.generated.h"
 
 class UAG_FootstepComponent;
+class UAG_InventoryComponent;
 class UAG_AbilitySystemComponentBase;
 class UAG_AttributeSetBase;
 
@@ -87,6 +88,8 @@ public:
     UAG_FootstepComponent* GetFootstepComponent() const;
 
     UAG_MotionWarpingComponent* GetMotionWarpingComponent() const;
+
+    UAG_InventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
 
     void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& ChangeData);
     
@@ -167,7 +170,10 @@ protected:
     class UCharacterDataAsset* CharacterDataAsset;
 
     UPROPERTY(BlueprintReadOnly)
-    class UAG_FootstepComponent* FootstepComponent;
+    UAG_FootstepComponent* FootstepComponent;
+
+    UPROPERTY(BlueprintReadOnly)
+    UAG_InventoryComponent* InventoryComponent;
 
     UPROPERTY(EditDefaultsOnly)
     FGameplayTag JumpTag;

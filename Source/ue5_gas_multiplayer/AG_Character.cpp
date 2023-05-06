@@ -16,6 +16,7 @@
 #include "AbilitySystem/Components/AG_AbilitySystemComponentBase.h"
 #include "ActorComponents/AG_CharacterMovementComponent.h"
 #include "ActorComponents/AG_FootstepComponent.h"
+#include "ActorComponents/AG_InventoryComponent.h"
 #include "ActorComponents/AG_MotionWarpingComponent.h"
 #include "DataAssets/CharacterDataAsset.h"
 #include "Net/UnrealNetwork.h"
@@ -74,6 +75,8 @@ AAG_Character::AAG_Character(const FObjectInitializer& ObjectInitializer)
         &AAG_Character::OnMaxMovementSpeedChanged);
 
     MotionWarpingComponent = CreateDefaultSubobject<UAG_MotionWarpingComponent>(TEXT("MotionWarpingComponent"));
+    InventoryComponent = CreateDefaultSubobject<UAG_InventoryComponent>(TEXT("InventoryComponent"));
+    InventoryComponent->SetIsReplicated(true);
 }
 
 void AAG_Character::PostInitializeComponents()
