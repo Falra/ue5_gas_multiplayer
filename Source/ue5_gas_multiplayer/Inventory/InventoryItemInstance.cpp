@@ -3,6 +3,7 @@
 
 #include "InventoryItemInstance.h"
 
+#include "ActionGameStatics.h"
 #include "Net/UnrealNetwork.h"
 
 void UInventoryItemInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -16,6 +17,11 @@ void UInventoryItemInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 void UInventoryItemInstance::Init(TSubclassOf<UItemStaticData> InItemStaticDataClass)
 {
     ItemStaticDataClass = InItemStaticDataClass;
+}
+
+const UItemStaticData* UInventoryItemInstance::GetItemStaticData() const
+{
+    return UActionGameStatics::GetItemStaticData(ItemStaticDataClass);
 }
 
 void UInventoryItemInstance::OnRep_Equipped()

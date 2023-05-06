@@ -18,6 +18,9 @@ public:
     
     virtual bool IsSupportedForNetworking() const override { return true; }
 
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    const UItemStaticData* GetItemStaticData() const;
+
     UPROPERTY(Replicated)
     TSubclassOf<UItemStaticData> ItemStaticDataClass;
 
