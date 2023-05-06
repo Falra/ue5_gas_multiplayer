@@ -22,6 +22,9 @@ protected:
 
     UPROPERTY(Replicated)
     FInventoryList InventoryList;
+
+    UPROPERTY(EditDefaultsOnly)
+    TArray<TSubclassOf<UItemStaticData>> DefaultItems;
     
 public:
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

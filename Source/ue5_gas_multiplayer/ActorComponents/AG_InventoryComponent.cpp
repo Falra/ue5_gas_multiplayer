@@ -27,6 +27,11 @@ UAG_InventoryComponent::UAG_InventoryComponent()
 void UAG_InventoryComponent::InitializeComponent()
 {
     Super::InitializeComponent();
+
+    for (const auto ItemClass : DefaultItems)
+    {
+        InventoryList.AddItem(ItemClass);
+    }
 }
 
 bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
