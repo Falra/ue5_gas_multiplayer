@@ -34,11 +34,6 @@ void UAG_InventoryComponent::InitializeComponent()
         {
             InventoryList.AddItem(ItemClass);
         }
-
-        if (InventoryList.GetItemsRef().Num() > 0)
-        {
-            EquipItem(InventoryList.GetItemsRef()[0].ItemInstance->ItemStaticDataClass);
-        }
     }
 }
 

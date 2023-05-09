@@ -34,7 +34,12 @@ void UInventoryItemInstance::OnRep_Equipped()
 
 void UInventoryItemInstance::OnEquipped(AActor* ItemOwner /* = nullptr */)
 {
-    UWorld* World = GetWorld();
+    if (!ItemOwner)
+    {
+        return;
+    }
+    
+    UWorld* World = ItemOwner->GetWorld();
     if (!World)
     {
         return;
