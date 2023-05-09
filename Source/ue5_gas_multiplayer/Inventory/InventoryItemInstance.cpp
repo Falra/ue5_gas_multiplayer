@@ -5,6 +5,7 @@
 
 #include "ActionGameStatics.h"
 #include "Actors/ItemActor.h"
+#include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 
 void UInventoryItemInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -31,7 +32,7 @@ void UInventoryItemInstance::OnRep_Equipped()
 
 }
 
-void UInventoryItemInstance::OnEquipped()
+void UInventoryItemInstance::OnEquipped(AActor* ItemOwner /* = nullptr */)
 {
     UWorld* World = GetWorld();
     if (!World)
@@ -39,9 +40,15 @@ void UInventoryItemInstance::OnEquipped()
         return;
     }
     FTransform Transform;
-    ItemActor = World->SpawnActorDeferred<AItemActor>(GetItemStaticData()->ItemActorClass, Transform);
+    const UItemStaticData* ItemStaticData = GetItemStaticData();
+    ItemActor = World->SpawnActorDeferred<AItemActor>(ItemStaticData->ItemActorClass, Transform, ItemOwner);
     ItemActor->Init(this);
     ItemActor->FinishSpawning(Transform);
+    if (const auto* Character = Cast<ACharacter>(ItemOwner))
+    {
+        USkeletalMeshComponent* SkeletalMesh = Character->GetMesh();
+        ItemActor->AttachToComponent(SkeletalMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, ItemStaticData->AttachmentSocket);
+    }
 }
 
 void UInventoryItemInstance::OnUnequipped()

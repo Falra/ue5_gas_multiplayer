@@ -31,7 +31,7 @@ public:
     UFUNCTION()
     void OnRep_Equipped();
 
-    virtual void OnEquipped();
+    virtual void OnEquipped(AActor* ItemOwner = nullptr);
     virtual void OnUnequipped();
 
 protected:

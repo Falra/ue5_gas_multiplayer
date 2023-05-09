@@ -34,6 +34,11 @@ void UAG_InventoryComponent::InitializeComponent()
         {
             InventoryList.AddItem(ItemClass);
         }
+
+        if (InventoryList.GetItemsRef().Num() > 0)
+        {
+            EquipItem(InventoryList.GetItemsRef()[0].ItemInstance->ItemStaticDataClass);
+        }
     }
 }
 
@@ -57,7 +62,7 @@ void UAG_InventoryComponent::EquipItem(TSubclassOf<UItemStaticData> InItemStatic
     {
         if (Item.ItemInstance->ItemStaticDataClass == InItemStaticDataClass)
         {
-            Item.ItemInstance->OnEquipped();
+            Item.ItemInstance->OnEquipped(GetOwner());
             CurrentItem = Item.ItemInstance;
             break;
         }
