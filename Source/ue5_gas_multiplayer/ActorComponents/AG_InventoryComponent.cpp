@@ -80,7 +80,8 @@ void UAG_InventoryComponent::DropItem()
     {
         return;
     }
-    CurrentItem->OnUnequipped();
+    CurrentItem->OnDropped();
+    RemoveItem(CurrentItem->ItemStaticDataClass);
     CurrentItem = nullptr;
 }
 

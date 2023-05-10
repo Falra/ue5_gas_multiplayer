@@ -3,6 +3,8 @@
 
 #include "ItemActor.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "Components/SphereComponent.h"
 #include "Engine/ActorChannel.h"
 #include "Inventory/InventoryItemInstance.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -12,11 +14,23 @@ AItemActor::AItemActor()
 {
     PrimaryActorTick.bCanEverTick = true;
     bReplicates = true;
+    
+    SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+    SphereComponent->SetupAttachment(RootComponent);
+    SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AItemActor::OnComponentBeginOverlap);
 }
 
 void AItemActor::BeginPlay()
 {
     Super::BeginPlay();
+}
+
+void AItemActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    FGameplayEventData PayloadData;
+    PayloadData.OptionalObject = this;
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, OverlapGameplayTag, PayloadData);
 }
 
 bool AItemActor::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -39,36 +53,41 @@ void AItemActor::Tick(float DeltaTime)
 void AItemActor::OnEquipped()
 {
     ItemState = EItemState::Equipped;
+
+    SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AItemActor::OnUnequipped()
 {
     ItemState = EItemState::None;
+
+    SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AItemActor::OnDropped()
 {
     ItemState = EItemState::Dropped;
+
+    SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    
     GetRootComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
     if (AActor* ItemOwner = GetOwner())
     {
         const FVector Location = GetActorLocation();
         const FVector Forward = ItemOwner->GetActorForwardVector();
         const FVector TraceStart = Location + Forward * 100.0f;
-        FVector TraceEnd = TraceStart * -FVector::UpVector * 1000.0f;
+        const FVector TraceEnd = TraceStart * -FVector::UpVector * 1000.0f;
         TArray IgnoreActors { ItemOwner };
-        static const auto* CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("AbilitySystem.ShowDebugTraversal"));
-        const bool bShowTraversal = CVar->GetInt() > 0;
-        const EDrawDebugTrace::Type DrawDebugType = bShowTraversal ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
+        static const auto* CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("ShowDebugInventory"));
+        const bool bShowDebugInventory = CVar->GetInt() > 0;
+        const EDrawDebugTrace::Type DrawDebugType = bShowDebugInventory ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
         
         FHitResult HitResult;
         UKismetSystemLibrary::LineTraceSingleByProfile(Owner, TraceStart, TraceEnd, TEXT("WorldStatic"), true, IgnoreActors,
             DrawDebugType, HitResult, true);
-        if (HitResult.bBlockingHit)
-        {
-            TraceEnd = HitResult.Location;
-        }
-        SetActorLocation(TraceEnd);
+
+        SetActorLocation(HitResult.bBlockingHit ? HitResult.Location : TraceEnd);
     }
 }
 
