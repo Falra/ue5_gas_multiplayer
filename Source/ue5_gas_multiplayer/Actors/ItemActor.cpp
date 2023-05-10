@@ -5,6 +5,7 @@
 
 #include "Engine/ActorChannel.h"
 #include "Inventory/InventoryItemInstance.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 
 AItemActor::AItemActor()
@@ -46,6 +47,26 @@ void AItemActor::OnUnequipped()
 void AItemActor::OnDropped()
 {
     GetRootComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+    if (AActor* Owner = GetOwner())
+    {
+        const FVector Location = GetActorLocation();
+        const FVector Forward = Owner->GetActorForwardVector();
+        const FVector TraceStart = Location + Forward * 100.0f;
+        FVector TraceEnd = TraceStart * -FVector::UpVector * 1000.0f;
+        TArray IgnoreActors { Owner };
+        static const auto* CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("AbilitySystem.ShowDebugTraversal"));
+        const bool bShowTraversal = CVar->GetInt() > 0;
+        const EDrawDebugTrace::Type DrawDebugType = bShowTraversal ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
+        
+        FHitResult HitResult;
+        UKismetSystemLibrary::LineTraceSingleByProfile(Owner, TraceStart, TraceEnd, TEXT("WorldStatic"), true, IgnoreActors,
+            DrawDebugType, HitResult, true);
+        if (HitResult.bBlockingHit)
+        {
+            TraceEnd = HitResult.Location;
+        }
+        SetActorLocation(TraceEnd);
+    }
 }
 
 void AItemActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
