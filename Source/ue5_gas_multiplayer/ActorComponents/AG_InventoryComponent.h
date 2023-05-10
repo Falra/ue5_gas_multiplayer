@@ -33,6 +33,9 @@ public:
     UFUNCTION(BlueprintCallable)
     void UnequipItem();
 
+    UFUNCTION(BlueprintCallable)
+    void DropItem();
+    
     UFUNCTION(BlueprintCallable, BlueprintPure)
     UInventoryItemInstance* GetEquippedItem() const { return CurrentItem; }
 protected:

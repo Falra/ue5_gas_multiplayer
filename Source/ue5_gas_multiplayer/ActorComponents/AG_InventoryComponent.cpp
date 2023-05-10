@@ -74,6 +74,16 @@ void UAG_InventoryComponent::UnequipItem()
     CurrentItem = nullptr;
 }
 
+void UAG_InventoryComponent::DropItem()
+{
+    if (!GetOwner()->HasAuthority() || !IsValid(CurrentItem))
+    {
+        return;
+    }
+    CurrentItem->OnUnequipped();
+    CurrentItem = nullptr;
+}
+
 bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
     bool bWroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);

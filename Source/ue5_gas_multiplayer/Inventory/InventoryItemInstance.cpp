@@ -64,3 +64,11 @@ void UInventoryItemInstance::OnUnequipped()
         ItemActor = nullptr;
     }
 }
+
+void UInventoryItemInstance::OnDropped()
+{
+    if (IsValid(ItemActor))
+    {
+        ItemActor->OnDropped();
+    }
+}

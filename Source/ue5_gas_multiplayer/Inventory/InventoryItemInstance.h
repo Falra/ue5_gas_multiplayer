@@ -33,6 +33,7 @@ public:
 
     virtual void OnEquipped(AActor* ItemOwner = nullptr);
     virtual void OnUnequipped();
+    virtual void OnDropped();
 
 protected:
 

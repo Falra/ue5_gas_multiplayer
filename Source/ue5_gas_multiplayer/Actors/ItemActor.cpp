@@ -45,6 +45,7 @@ void AItemActor::OnUnequipped()
 
 void AItemActor::OnDropped()
 {
+    GetRootComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 }
 
 void AItemActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
