@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ActionGameTypes.h"
 #include "GameFramework/Actor.h"
 #include "ItemActor.generated.h"
 
@@ -23,6 +24,9 @@ protected:
     
     UPROPERTY(Replicated)
     UInventoryItemInstance* ItemInstance;
+
+    UPROPERTY(Replicated)
+    EItemState ItemState = EItemState::None;
     
 public:
     virtual void Tick(float DeltaTime) override;

@@ -61,3 +61,11 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     FName AttachmentSocket = NAME_None;
 };
+
+UENUM(BlueprintType)
+enum class EItemState : uint8
+{
+    None UMETA(DisplayName = "None"),
+    Equipped UMETA(DisplayName = "Equipped"),
+    Dropped UMETA(DisplayName = "Dropped")
+};

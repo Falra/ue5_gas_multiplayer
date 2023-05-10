@@ -38,22 +38,25 @@ void AItemActor::Tick(float DeltaTime)
 
 void AItemActor::OnEquipped()
 {
+    ItemState = EItemState::Equipped;
 }
 
 void AItemActor::OnUnequipped()
 {
+    ItemState = EItemState::None;
 }
 
 void AItemActor::OnDropped()
 {
+    ItemState = EItemState::Dropped;
     GetRootComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-    if (AActor* Owner = GetOwner())
+    if (AActor* ItemOwner = GetOwner())
     {
         const FVector Location = GetActorLocation();
-        const FVector Forward = Owner->GetActorForwardVector();
+        const FVector Forward = ItemOwner->GetActorForwardVector();
         const FVector TraceStart = Location + Forward * 100.0f;
         FVector TraceEnd = TraceStart * -FVector::UpVector * 1000.0f;
-        TArray IgnoreActors { Owner };
+        TArray IgnoreActors { ItemOwner };
         static const auto* CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("AbilitySystem.ShowDebugTraversal"));
         const bool bShowTraversal = CVar->GetInt() > 0;
         const EDrawDebugTrace::Type DrawDebugType = bShowTraversal ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
@@ -74,4 +77,5 @@ void AItemActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AItemActor, ItemInstance);
+    DOREPLIFETIME(AItemActor, ItemState);
 }
