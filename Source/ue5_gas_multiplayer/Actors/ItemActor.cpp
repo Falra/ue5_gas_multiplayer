@@ -14,6 +14,7 @@ AItemActor::AItemActor()
 {
     PrimaryActorTick.bCanEverTick = true;
     bReplicates = true;
+    SetReplicatingMovement(true);
     
     SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
     SphereComponent->SetupAttachment(RootComponent);
@@ -55,6 +56,7 @@ void AItemActor::OnEquipped()
     ItemState = EItemState::Equipped;
 
     SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    SphereComponent->SetGenerateOverlapEvents(false);
 }
 
 void AItemActor::OnUnequipped()
@@ -62,13 +64,12 @@ void AItemActor::OnUnequipped()
     ItemState = EItemState::None;
 
     SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    SphereComponent->SetGenerateOverlapEvents(false);
 }
 
 void AItemActor::OnDropped()
 {
     ItemState = EItemState::Dropped;
-
-    SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
     
     GetRootComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 
@@ -89,6 +90,9 @@ void AItemActor::OnDropped()
 
         SetActorLocation(HitResult.bBlockingHit ? HitResult.Location : TraceEnd);
     }
+    
+    SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    SphereComponent->SetGenerateOverlapEvents(true);
 }
 
 void AItemActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

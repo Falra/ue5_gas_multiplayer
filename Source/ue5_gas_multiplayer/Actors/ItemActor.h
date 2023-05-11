@@ -38,6 +38,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly)
     FGameplayTag OverlapGameplayTag;
+
+    UPROPERTY(EditDefaultsOnly)
+    TSubclassOf<UItemStaticData> ItemStaticDataClass;
     
 public:
     virtual void Tick(float DeltaTime) override;
