@@ -50,7 +50,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintPure)
     UInventoryItemInstance* GetEquippedItem() const { return CurrentItem; }
 
-    virtual void GameplayEventCallBack(const FGameplayEventData* Payload);
+    virtual void GameplayEventCallback(const FGameplayEventData* Payload);
 
     static FGameplayTag EquipItemActorTag;
     static FGameplayTag DropItemTag;

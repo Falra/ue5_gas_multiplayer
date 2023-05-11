@@ -3,6 +3,8 @@
 
 #include "AG_InventoryComponent.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "ActionGameTypes.h"
 #include "GameplayTagsManager.h"
 #include "Abilities/GameplayAbilityTypes.h"
@@ -43,6 +45,14 @@ void UAG_InventoryComponent::InitializeComponent()
         {
             InventoryList.AddItem(ItemClass);
         }
+    }
+
+    if (auto* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner()))
+    {
+        ASC->GenericGameplayEventCallbacks.FindOrAdd(EquipItemActorTag).AddUObject(this, &UAG_InventoryComponent::GameplayEventCallback);
+        ASC->GenericGameplayEventCallbacks.FindOrAdd(DropItemTag).AddUObject(this, &UAG_InventoryComponent::GameplayEventCallback);
+        ASC->GenericGameplayEventCallbacks.FindOrAdd(EquipNextTag).AddUObject(this, &UAG_InventoryComponent::GameplayEventCallback);
+        ASC->GenericGameplayEventCallbacks.FindOrAdd(UnequipTag).AddUObject(this, &UAG_InventoryComponent::GameplayEventCallback);
     }
 }
 
@@ -169,7 +179,7 @@ void UAG_InventoryComponent::EquipNextItem()
     EquipItemInstance(TargetItem);
 }
 
-void UAG_InventoryComponent::GameplayEventCallBack(const FGameplayEventData* Payload)
+void UAG_InventoryComponent::GameplayEventCallback(const FGameplayEventData* Payload)
 {
     const ENetRole NetRole = GetOwnerRole();
     if (NetRole == ROLE_Authority)
