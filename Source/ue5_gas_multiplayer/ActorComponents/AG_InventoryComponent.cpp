@@ -132,7 +132,7 @@ void UAG_InventoryComponent::DropItem()
 
 void UAG_InventoryComponent::EquipNextItem()
 {
-    if (!GetOwner()->HasAuthority() || !IsValid(CurrentItem))
+    if (!GetOwner()->HasAuthority())
     {
         return;
     }
@@ -171,17 +171,24 @@ void UAG_InventoryComponent::EquipNextItem()
 
 void UAG_InventoryComponent::GameplayEventCallBack(const FGameplayEventData* Payload)
 {
-    
+    const ENetRole NetRole = GetOwnerRole();
+    if (NetRole == ROLE_Authority)
+    {
+        HandleGameplayEventInternal(*Payload);
+    }
+    else if (NetRole == ROLE_AutonomousProxy)
+    {
+        ServerHandleGameplayEvent(*Payload);
+    }
 }
 
 bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
     bool bWroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
 
-    for (FInventoryListItem& Item : InventoryList.GetItemsRef())
+    for (const FInventoryListItem& Item : InventoryList.GetItemsRef())
     {
-        UInventoryItemInstance* ItemInstance = Item.ItemInstance;
-        if (IsValid(ItemInstance))
+        if (UInventoryItemInstance* ItemInstance = Item.ItemInstance; IsValid(ItemInstance))
         {
             bWroteSomething |= Channel->ReplicateSubobject(ItemInstance, *Bunch, *RepFlags);
         }
@@ -208,12 +215,41 @@ void UAG_InventoryComponent::AddInventoryTags() const
     UGameplayTagsManager::OnLastChanceToAddNativeTags().RemoveAll(this);
 }
 
-void UAG_InventoryComponent::HandleGameplayEventInternal(FGameplayEventData Payload)
+void UAG_InventoryComponent::HandleGameplayEventInternal(const FGameplayEventData& Payload)
 {
+    if (!GetOwner()->HasAuthority())
+    {
+        return;
+    }
+    const FGameplayTag EventTag = Payload.EventTag;
+    if (EventTag == EquipItemActorTag)
+    {
+        if (const auto* ItemInstance = Cast<UInventoryItemInstance>(Payload.OptionalObject))
+        {
+            EquipItemInstance(const_cast<UInventoryItemInstance*>(ItemInstance));
+            if (Payload.Instigator)
+            {
+                const_cast<AActor*>(Payload.Instigator.Get())->Destroy();
+            }
+        }
+    }
+    else if (EventTag == DropItemTag)
+    {
+        DropItem();
+    }
+    else if (EventTag == EquipNextTag)
+    {
+        EquipNextItem();
+    }
+    else if (EventTag == UnequipTag)
+    {
+        UnequipItem();
+    }
 }
 
-void UAG_InventoryComponent::ServerHandleGameplayEvent_Implementation(FGameplayEventData Payload)
+void UAG_InventoryComponent::ServerHandleGameplayEvent_Implementation(const FGameplayEventData Payload)
 {
+    HandleGameplayEventInternal(Payload);
 }
 
 void UAG_InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

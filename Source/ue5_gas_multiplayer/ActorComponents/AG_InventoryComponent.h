@@ -73,7 +73,7 @@ protected:
 
     FDelegateHandle TagDelegateHandle;
 
-    void HandleGameplayEventInternal(FGameplayEventData Payload);
+    void HandleGameplayEventInternal(const FGameplayEventData& Payload);
 
     UFUNCTION(Server, Reliable)
     void ServerHandleGameplayEvent(FGameplayEventData Payload);
