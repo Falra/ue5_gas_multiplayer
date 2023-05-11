@@ -60,7 +60,7 @@ public:
 protected:
     
     UFUNCTION()
-    void AddInventoryTags();
+    void AddInventoryTags() const;
     
     UPROPERTY(Replicated)
     FInventoryList InventoryList;

@@ -132,25 +132,46 @@ void UAG_InventoryComponent::DropItem()
 
 void UAG_InventoryComponent::EquipNextItem()
 {
+    if (!GetOwner()->HasAuthority() || !IsValid(CurrentItem))
+    {
+        return;
+    }
+
+    TArray<FInventoryListItem>& Items = InventoryList.GetItemsRef();
+    const bool bNoItems = Items.Num() == 0;
+    const bool bOneAndEquipped = Items.Num() == 1 && CurrentItem;
+    if (bNoItems || bOneAndEquipped)
+    {
+        return;
+    }
+
+    UInventoryItemInstance* TargetItem = nullptr;
+    for (const auto& Item : Items)
+    {
+        if (Item.ItemInstance->GetItemStaticData()->bCanBeEquipped
+            && Item.ItemInstance != CurrentItem)
+        {
+            TargetItem = Item.ItemInstance;
+            break;
+        }
+    }
+
+    if (!TargetItem)
+    {
+        return;
+    }
+    
+    if (CurrentItem)
+    {
+        UnequipItem();
+    }
+
+    EquipItemInstance(TargetItem);
 }
 
 void UAG_InventoryComponent::GameplayEventCallBack(const FGameplayEventData* Payload)
 {
-    auto& TagsManager = UGameplayTagsManager::Get();
-
-    EquipItemActorTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.EquipItemActor"),
-        TEXT("Equip item form item actor event"));
-
-    DropItemTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.DropItem"),
-        TEXT("Drop equipped item"));
-
-    EquipNextTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.EquipNext"),
-        TEXT("Try to equip next item"));
-
-    UnequipTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.Unequip"),
-        TEXT("Unequip equipped item"));
     
-    UGameplayTagsManager::OnLastChanceToAddNativeTags().RemoveAll(this);
 }
 
 bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -168,9 +189,23 @@ bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBun
     return bWroteSomething;
 }
 
-void UAG_InventoryComponent::AddInventoryTags()
+void UAG_InventoryComponent::AddInventoryTags() const
 {
+    auto& TagsManager = UGameplayTagsManager::Get();
+
+    EquipItemActorTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.EquipItemActor"),
+        TEXT("Equip item form item actor event"));
+
+    DropItemTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.DropItem"),
+        TEXT("Drop equipped item"));
+
+    EquipNextTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.EquipNext"),
+        TEXT("Try to equip next item"));
+
+    UnequipTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.Unequip"),
+        TEXT("Unequip equipped item"));
     
+    UGameplayTagsManager::OnLastChanceToAddNativeTags().RemoveAll(this);
 }
 
 void UAG_InventoryComponent::HandleGameplayEventInternal(FGameplayEventData Payload)
