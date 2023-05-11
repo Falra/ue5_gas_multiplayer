@@ -4,10 +4,16 @@
 #include "AG_InventoryComponent.h"
 
 #include "ActionGameTypes.h"
+#include "GameplayTagsManager.h"
 #include "Abilities/GameplayAbilityTypes.h"
 #include "Engine/ActorChannel.h"
 #include "Inventory/InventoryItemInstance.h"
 #include "Net/UnrealNetwork.h"
+
+FGameplayTag UAG_InventoryComponent::EquipItemActorTag;
+FGameplayTag UAG_InventoryComponent::DropItemTag;
+FGameplayTag UAG_InventoryComponent::EquipNextTag;
+FGameplayTag UAG_InventoryComponent::UnequipTag;
 
 static TAutoConsoleVariable<int32> CVarShowInventory(
     TEXT("ShowDebugInventory"),
@@ -23,6 +29,8 @@ UAG_InventoryComponent::UAG_InventoryComponent()
     PrimaryComponentTick.bCanEverTick = true;
     bWantsInitializeComponent = true;
     SetIsReplicatedByDefault(true);
+
+    UGameplayTagsManager::OnLastChanceToAddNativeTags().AddUObject(this, &UAG_InventoryComponent::AddInventoryTags);
 }
 
 void UAG_InventoryComponent::InitializeComponent()
@@ -128,7 +136,21 @@ void UAG_InventoryComponent::EquipNextItem()
 
 void UAG_InventoryComponent::GameplayEventCallBack(const FGameplayEventData* Payload)
 {
+    auto& TagsManager = UGameplayTagsManager::Get();
+
+    EquipItemActorTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.EquipItemActor"),
+        TEXT("Equip item form item actor event"));
+
+    DropItemTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.DropItem"),
+        TEXT("Drop equipped item"));
+
+    EquipNextTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.EquipNext"),
+        TEXT("Try to equip next item"));
+
+    UnequipTag = TagsManager.AddNativeGameplayTag(TEXT("Event.Inventory.Unequip"),
+        TEXT("Unequip equipped item"));
     
+    UGameplayTagsManager::OnLastChanceToAddNativeTags().RemoveAll(this);
 }
 
 bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
@@ -146,8 +168,9 @@ bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBun
     return bWroteSomething;
 }
 
-void UAG_InventoryComponent::AddGameplayTags()
+void UAG_InventoryComponent::AddInventoryTags()
 {
+    
 }
 
 void UAG_InventoryComponent::HandleGameplayEventInternal(FGameplayEventData Payload)

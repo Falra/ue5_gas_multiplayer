@@ -17,7 +17,6 @@ class UE5_GAS_MULTIPLAYER_API UAG_InventoryComponent : public UActorComponent
     GENERATED_BODY()
 
 public:
-
     UAG_InventoryComponent();
 
     virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override; 
@@ -57,11 +56,11 @@ public:
     static FGameplayTag DropItemTag;
     static FGameplayTag EquipNextTag;
     static FGameplayTag UnequipTag;
-    
+
 protected:
     
     UFUNCTION()
-    void AddGameplayTags();
+    void AddInventoryTags();
     
     UPROPERTY(Replicated)
     FInventoryList InventoryList;
