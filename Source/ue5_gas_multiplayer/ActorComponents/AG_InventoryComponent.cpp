@@ -4,6 +4,7 @@
 #include "AG_InventoryComponent.h"
 
 #include "ActionGameTypes.h"
+#include "Abilities/GameplayAbilityTypes.h"
 #include "Engine/ActorChannel.h"
 #include "Inventory/InventoryItemInstance.h"
 #include "Net/UnrealNetwork.h"
@@ -125,6 +126,11 @@ void UAG_InventoryComponent::EquipNextItem()
 {
 }
 
+void UAG_InventoryComponent::GameplayEventCallBack(const FGameplayEventData* Payload)
+{
+    
+}
+
 bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
 {
     bool bWroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
@@ -138,6 +144,18 @@ bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBun
         }
     }
     return bWroteSomething;
+}
+
+void UAG_InventoryComponent::AddGameplayTags()
+{
+}
+
+void UAG_InventoryComponent::HandleGameplayEventInternal(FGameplayEventData Payload)
+{
+}
+
+void UAG_InventoryComponent::ServerHandleGameplayEvent_Implementation(FGameplayEventData Payload)
+{
 }
 
 void UAG_InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Components/ActorComponent.h"
 #include "Inventory/InventoryList.h"
 #include "AG_InventoryComponent.generated.h"
 
+
+struct FGameplayEventData;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class UE5_GAS_MULTIPLAYER_API UAG_InventoryComponent : public UActorComponent
@@ -47,7 +50,18 @@ public:
     
     UFUNCTION(BlueprintCallable, BlueprintPure)
     UInventoryItemInstance* GetEquippedItem() const { return CurrentItem; }
+
+    virtual void GameplayEventCallBack(const FGameplayEventData* Payload);
+
+    static FGameplayTag EquipItemActorTag;
+    static FGameplayTag DropItemTag;
+    static FGameplayTag EquipNextTag;
+    static FGameplayTag UnequipTag;
+    
 protected:
+    
+    UFUNCTION()
+    void AddGameplayTags();
     
     UPROPERTY(Replicated)
     FInventoryList InventoryList;
@@ -57,6 +71,13 @@ protected:
 
     UPROPERTY(Replicated)
     UInventoryItemInstance* CurrentItem;
+
+    FDelegateHandle TagDelegateHandle;
+
+    void HandleGameplayEventInternal(FGameplayEventData Payload);
+
+    UFUNCTION(Server, Reliable)
+    void ServerHandleGameplayEvent(FGameplayEventData Payload);
     
 public:
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
