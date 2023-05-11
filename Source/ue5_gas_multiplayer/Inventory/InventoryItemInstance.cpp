@@ -48,12 +48,14 @@ void UInventoryItemInstance::OnEquipped(AActor* ItemOwner /* = nullptr */)
     const UItemStaticData* ItemStaticData = GetItemStaticData();
     ItemActor = World->SpawnActorDeferred<AItemActor>(ItemStaticData->ItemActorClass, Transform, ItemOwner);
     ItemActor->Init(this);
+    ItemActor->OnEquipped();
     ItemActor->FinishSpawning(Transform);
     if (const auto* Character = Cast<ACharacter>(ItemOwner))
     {
         USkeletalMeshComponent* SkeletalMesh = Character->GetMesh();
         ItemActor->AttachToComponent(SkeletalMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, ItemStaticData->AttachmentSocket);
     }
+    bEquipped = true;
 }
 
 void UInventoryItemInstance::OnUnequipped()
@@ -63,6 +65,7 @@ void UInventoryItemInstance::OnUnequipped()
         ItemActor->Destroy();
         ItemActor = nullptr;
     }
+    bEquipped = false;
 }
 
 void UInventoryItemInstance::OnDropped()
@@ -71,4 +74,5 @@ void UInventoryItemInstance::OnDropped()
     {
         ItemActor->OnDropped();
     }
+    bEquipped = false;
 }
