@@ -24,6 +24,18 @@ AItemActor::AItemActor()
 void AItemActor::BeginPlay()
 {
     Super::BeginPlay();
+
+    if (HasAuthority())
+    {
+        if (!IsValid(ItemInstance) && IsValid(ItemStaticDataClass))
+        {
+            ItemInstance = NewObject<UInventoryItemInstance>();
+            ItemInstance->Init(ItemStaticDataClass);
+        }
+    }
+
+    SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    SphereComponent->SetGenerateOverlapEvents(true);
 }
 
 void AItemActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
