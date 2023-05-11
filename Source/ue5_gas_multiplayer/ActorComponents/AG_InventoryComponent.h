@@ -71,8 +71,6 @@ protected:
     UPROPERTY(Replicated)
     UInventoryItemInstance* CurrentItem;
 
-    FDelegateHandle TagDelegateHandle;
-
     void HandleGameplayEventInternal(const FGameplayEventData& Payload);
 
     UFUNCTION(Server, Reliable)
