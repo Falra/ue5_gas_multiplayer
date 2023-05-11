@@ -39,11 +39,28 @@ void UAG_InventoryComponent::InitializeComponent()
 
 void UAG_InventoryComponent::AddItem(TSubclassOf<UItemStaticData> InItemStaticDataClass)
 {
+    if (!GetOwner()->HasAuthority())
+    {
+        return;
+    }
     InventoryList.AddItem(InItemStaticDataClass);
+}
+
+void UAG_InventoryComponent::AddItemInstance(UInventoryItemInstance* InItemInstance)
+{
+    if (!GetOwner()->HasAuthority())
+    {
+        return;
+    }
+    InventoryList.AddItem(InItemInstance);
 }
 
 void UAG_InventoryComponent::RemoveItem(TSubclassOf<UItemStaticData> InItemStaticDataClass)
 {
+    if (!GetOwner()->HasAuthority())
+    {
+        return;
+    }
     InventoryList.RemoveItem(InItemStaticDataClass);
 }
 
@@ -62,6 +79,25 @@ void UAG_InventoryComponent::EquipItem(TSubclassOf<UItemStaticData> InItemStatic
             break;
         }
     }
+}
+
+void UAG_InventoryComponent::EquipItemInstance(UInventoryItemInstance* InItemInstance)
+{
+    if (!GetOwner()->HasAuthority())
+    {
+        return;
+    }
+
+    for (const auto& Item : InventoryList.GetItemsRef())
+    {
+        if (Item.ItemInstance == InItemInstance)
+        {
+            Item.ItemInstance->OnEquipped(GetOwner());
+            CurrentItem = Item.ItemInstance;
+            break;
+        }
+    }
+    
 }
 
 void UAG_InventoryComponent::UnequipItem()
@@ -83,6 +119,10 @@ void UAG_InventoryComponent::DropItem()
     CurrentItem->OnDropped();
     RemoveItem(CurrentItem->ItemStaticDataClass);
     CurrentItem = nullptr;
+}
+
+void UAG_InventoryComponent::EquipNextItem()
+{
 }
 
 bool UAG_InventoryComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)

@@ -25,16 +25,25 @@ public:
     void AddItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
 
     UFUNCTION(BlueprintCallable)
+    void AddItemInstance(UInventoryItemInstance* InItemInstance);
+    
+    UFUNCTION(BlueprintCallable)
     void RemoveItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
 
     UFUNCTION(BlueprintCallable)
     void EquipItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
 
     UFUNCTION(BlueprintCallable)
+    void EquipItemInstance(UInventoryItemInstance* InItemInstance);
+
+    UFUNCTION(BlueprintCallable)
     void UnequipItem();
 
     UFUNCTION(BlueprintCallable)
     void DropItem();
+
+    UFUNCTION(BlueprintCallable)
+    void EquipNextItem();
     
     UFUNCTION(BlueprintCallable, BlueprintPure)
     UInventoryItemInstance* GetEquippedItem() const { return CurrentItem; }
