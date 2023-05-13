@@ -12,7 +12,8 @@
 				"GameplayAbilities",
 				"Engine",
 				"PhysicsCore",
-				"MotionWarping"
+				"MotionWarping",
+				"GameplayTags"
 			]
 		}
 	],
