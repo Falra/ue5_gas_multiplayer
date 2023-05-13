@@ -49,7 +49,7 @@ void AItemActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
         PayloadData.OptionalObject = ItemInstance;
         PayloadData.EventTag = UAG_InventoryComponent::EquipItemActorTag;
         
-        UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, OverlapGameplayTag, PayloadData);
+        UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, UAG_InventoryComponent::EquipItemActorTag, PayloadData);
     }
 }
 

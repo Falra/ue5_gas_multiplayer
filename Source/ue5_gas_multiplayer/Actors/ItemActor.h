@@ -37,9 +37,6 @@ protected:
     USphereComponent* SphereComponent;
 
     UPROPERTY(EditDefaultsOnly)
-    FGameplayTag OverlapGameplayTag;
-
-    UPROPERTY(EditDefaultsOnly)
     TSubclassOf<UItemStaticData> ItemStaticDataClass;
     
 public:
