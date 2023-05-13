@@ -236,7 +236,7 @@ void UAG_InventoryComponent::HandleGameplayEventInternal(const FGameplayEventDat
     {
         if (const auto* ItemInstance = Cast<UInventoryItemInstance>(Payload.OptionalObject))
         {
-            EquipItemInstance(const_cast<UInventoryItemInstance*>(ItemInstance));
+            AddItemInstance(const_cast<UInventoryItemInstance*>(ItemInstance));
             if (Payload.Instigator)
             {
                 const_cast<AActor*>(Payload.Instigator.Get())->Destroy();
