@@ -4,6 +4,7 @@
 #include "ItemActor.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "ActorComponents/AG_InventoryComponent.h"
 #include "Components/SphereComponent.h"
 #include "Engine/ActorChannel.h"
 #include "Inventory/InventoryItemInstance.h"
@@ -41,9 +42,15 @@ void AItemActor::BeginPlay()
 void AItemActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
     int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-    FGameplayEventData PayloadData;
-    PayloadData.OptionalObject = this;
-    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, OverlapGameplayTag, PayloadData);
+    if (HasAuthority())
+    {
+        FGameplayEventData PayloadData;
+        PayloadData.Instigator = this;
+        PayloadData.OptionalObject = ItemInstance;
+        PayloadData.EventTag = UAG_InventoryComponent::EquipItemActorTag;
+        
+        UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, OverlapGameplayTag, PayloadData);
+    }
 }
 
 bool AItemActor::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)

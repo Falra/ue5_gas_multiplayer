@@ -75,6 +75,15 @@ class AAG_Character : public ACharacter, public IAbilitySystemInterface
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* TurnAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* DropItemAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* EquipNextAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* UnequipItemAction;
     
 public:
     AAG_Character(const FObjectInitializer& ObjectInitializer);
@@ -131,6 +140,12 @@ protected:
     void OnSprintStarted(const FInputActionValue& Value);
 
     void OnSprintEnded(const FInputActionValue& Value);
+
+    void DropItem(const FInputActionValue& Value);
+    
+    void EquipNext(const FInputActionValue& Value);
+
+    void Unequip(const FInputActionValue& Value);
     
 protected:
     // APawn interface
