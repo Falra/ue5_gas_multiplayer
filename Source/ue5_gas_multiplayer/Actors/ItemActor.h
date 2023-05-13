@@ -30,8 +30,11 @@ protected:
     UPROPERTY(Replicated)
     UInventoryItemInstance* ItemInstance;
 
-    UPROPERTY(Replicated)
+    UPROPERTY(ReplicatedUsing = OnRep_ItemState)
     EItemState ItemState = EItemState::None;
+
+    UFUNCTION()
+    void OnRep_ItemState();
 
     UPROPERTY()
     USphereComponent* SphereComponent;

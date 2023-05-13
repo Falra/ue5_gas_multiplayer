@@ -32,11 +32,11 @@ void AItemActor::BeginPlay()
         {
             ItemInstance = NewObject<UInventoryItemInstance>();
             ItemInstance->Init(ItemStaticDataClass);
+
+            SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+            SphereComponent->SetGenerateOverlapEvents(true);
         }
     }
-
-    SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-    SphereComponent->SetGenerateOverlapEvents(true);
 }
 
 void AItemActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -50,6 +50,21 @@ void AItemActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
         PayloadData.EventTag = UAG_InventoryComponent::EquipItemActorTag;
         
         UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, UAG_InventoryComponent::EquipItemActorTag, PayloadData);
+    }
+}
+
+void AItemActor::OnRep_ItemState()
+{
+    switch (ItemState)
+    {
+        case EItemState::Equipped:
+            SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+            SphereComponent->SetGenerateOverlapEvents(false);
+            break;
+       default:
+            SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+            SphereComponent->SetGenerateOverlapEvents(true);
+            break;
     }
 }
 
