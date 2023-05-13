@@ -32,7 +32,12 @@ UAG_InventoryComponent::UAG_InventoryComponent()
     bWantsInitializeComponent = true;
     SetIsReplicatedByDefault(true);
 
-    UGameplayTagsManager::OnLastChanceToAddNativeTags().AddUObject(this, &UAG_InventoryComponent::AddInventoryTags);
+    static bool bHandledAddingTags = false;
+    if (!bHandledAddingTags)
+    {
+        bHandledAddingTags = true;
+        UGameplayTagsManager::OnLastChanceToAddNativeTags().AddUObject(this, &UAG_InventoryComponent::AddInventoryTags);
+    }
 }
 
 void UAG_InventoryComponent::InitializeComponent()
