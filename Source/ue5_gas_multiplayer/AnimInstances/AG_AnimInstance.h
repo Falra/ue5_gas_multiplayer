@@ -6,9 +6,8 @@
 #include "Animation/AnimInstance.h"
 #include "AG_AnimInstance.generated.h"
 
-/**
- * 
- */
+class UItemStaticData;
+
 UCLASS()
 class UE5_GAS_MULTIPLAYER_API UAG_AnimInstance : public UAnimInstance
 {
@@ -27,6 +26,8 @@ protected:
     UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
     UAnimSequenceBase* GetCrouchIdleAnimation() const;
 
+    const UItemStaticData* GetEquippedItemData() const;
+    
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Animation")
     class UCharacterAnimDataAsset* DefaultCharacterAnimDataAsset;
 
