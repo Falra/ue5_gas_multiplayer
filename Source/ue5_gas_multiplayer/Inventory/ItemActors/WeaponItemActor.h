@@ -14,9 +14,10 @@ class UE5_GAS_MULTIPLAYER_API AWeaponItemActor : public AItemActor
 public:
     AWeaponItemActor();
 
+    const UWeaponStaticData* GetWeaponStaticData() const;
 protected:
-    virtual void BeginPlay() override;
+    virtual void InitInternal() override;
 
-public:
-    virtual void Tick(float DeltaTime) override;
+    UPROPERTY()
+    UMeshComponent* MeshComponent;
 };

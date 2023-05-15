@@ -2,17 +2,44 @@
 
 #include "WeaponItemActor.h"
 
+#include "Inventory/InventoryItemInstance.h"
+
 AWeaponItemActor::AWeaponItemActor()
 {
-    PrimaryActorTick.bCanEverTick = true;
+    
 }
 
-void AWeaponItemActor::BeginPlay()
+const UWeaponStaticData* AWeaponItemActor::GetWeaponStaticData() const
 {
-    Super::BeginPlay();
+    return ItemInstance ? Cast<UWeaponStaticData>(ItemInstance->GetItemStaticData()) : nullptr;
 }
 
-void AWeaponItemActor::Tick(float DeltaTime)
+void AWeaponItemActor::InitInternal()
 {
-    Super::Tick(DeltaTime);
+    Super::InitInternal();
+
+    if (const auto* WeaponData = GetWeaponStaticData())
+    {
+        if (WeaponData->SkeletalMesh)
+        {
+            if (auto* SkeletalComponent = NewObject<USkeletalMeshComponent>(this, "MeshComponent"))
+            {
+                SkeletalComponent->RegisterComponent();
+                SkeletalComponent->SetSkeletalMesh(WeaponData->SkeletalMesh);
+                SkeletalComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+                MeshComponent = SkeletalComponent;
+            }
+        }
+        else if (WeaponData->StaticMesh)
+        {
+            if (auto* StaticMesh = NewObject<UStaticMeshComponent>(this, "MeshComponent"))
+            {
+                StaticMesh->RegisterComponent();
+                StaticMesh->SetStaticMesh(WeaponData->StaticMesh);
+                StaticMesh->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+                MeshComponent = StaticMesh;
+            }
+        }
+        
+    }
 }
