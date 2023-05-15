@@ -53,6 +53,14 @@ void AItemActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
     }
 }
 
+void AItemActor::OnRep_ItemInstance(const UInventoryItemInstance* OldItemInstance)
+{
+    if (IsValid(ItemInstance) && !IsValid(OldItemInstance))
+    {
+        InitInternal();
+    }
+}
+
 void AItemActor::OnRep_ItemState()
 {
     switch (ItemState)

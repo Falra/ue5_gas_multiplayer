@@ -27,9 +27,12 @@ protected:
     UFUNCTION()
     void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
     
-    UPROPERTY(Replicated)
+    UPROPERTY(ReplicatedUsing = OnRep_ItemInstance)
     UInventoryItemInstance* ItemInstance;
 
+    UFUNCTION()
+    void OnRep_ItemInstance(const UInventoryItemInstance* OldItemInstance);
+    
     UPROPERTY(ReplicatedUsing = OnRep_ItemState)
     EItemState ItemState = EItemState::None;
 
@@ -41,6 +44,8 @@ protected:
 
     UPROPERTY(EditDefaultsOnly)
     TSubclassOf<UItemStaticData> ItemStaticDataClass;
+
+    virtual void InitInternal() { /* nothing to do here */ }
     
 public:
     virtual void Tick(float DeltaTime) override;
