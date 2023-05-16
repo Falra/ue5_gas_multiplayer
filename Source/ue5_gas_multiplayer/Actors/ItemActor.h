@@ -42,7 +42,7 @@ protected:
     UPROPERTY()
     USphereComponent* SphereComponent;
 
-    UPROPERTY(EditDefaultsOnly)
+    UPROPERTY(EditAnywhere)
     TSubclassOf<UItemStaticData> ItemStaticDataClass;
 
     virtual void InitInternal() { /* nothing to do here */ }
