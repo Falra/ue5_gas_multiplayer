@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "UObject/Object.h"
 #include "InventoryItemInstance.generated.h"
 
@@ -32,11 +33,17 @@ public:
     void OnRep_Equipped();
 
     virtual void OnEquipped(AActor* ItemOwner = nullptr);
-    virtual void OnUnequipped();
-    virtual void OnDropped();
+    virtual void OnUnequipped(AActor* ItemOwner = nullptr);
+    virtual void OnDropped(AActor* ItemOwner = nullptr);
 
 protected:
 
     UPROPERTY(Replicated)
     AItemActor* ItemActor;
+
+    void TryGrantAbilities(AActor* ItemOwner);
+    void TryRemoveAbilities(AActor* ItemOwner);
+
+    UPROPERTY()
+    TArray<FGameplayAbilitySpecHandle> GrantedAbilityHandles;
 };

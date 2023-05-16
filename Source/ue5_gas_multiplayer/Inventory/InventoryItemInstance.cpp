@@ -3,6 +3,8 @@
 
 #include "InventoryItemInstance.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "ActionGameStatics.h"
 #include "Actors/ItemActor.h"
 #include "GameFramework/Character.h"
@@ -55,24 +57,66 @@ void UInventoryItemInstance::OnEquipped(AActor* ItemOwner /* = nullptr */)
         USkeletalMeshComponent* SkeletalMesh = Character->GetMesh();
         ItemActor->AttachToComponent(SkeletalMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, ItemStaticData->AttachmentSocket);
     }
+    
+    TryGrantAbilities(ItemOwner);
+    
     bEquipped = true;
 }
 
-void UInventoryItemInstance::OnUnequipped()
+void UInventoryItemInstance::OnUnequipped(AActor* ItemOwner /* = nullptr */)
 {
     if (IsValid(ItemActor))
     {
         ItemActor->Destroy();
         ItemActor = nullptr;
     }
+    
+    TryRemoveAbilities(ItemOwner);
+    
     bEquipped = false;
 }
 
-void UInventoryItemInstance::OnDropped()
+void UInventoryItemInstance::OnDropped(AActor* ItemOwner /* = nullptr */)
 {
     if (IsValid(ItemActor))
     {
         ItemActor->OnDropped();
     }
+    
+    TryRemoveAbilities(ItemOwner);
+    
     bEquipped = false;
+}
+
+void UInventoryItemInstance::TryGrantAbilities(AActor* ItemOwner)
+{
+    if (!ItemOwner || !ItemOwner->HasAuthority())
+    {
+        return;
+    }
+    if (UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ItemOwner))
+    {
+        const UItemStaticData* ItemStaticData = GetItemStaticData();
+        for (auto& Ability : ItemStaticData->GrantedAbilities)
+        {
+            GrantedAbilityHandles.Add(ASC->GiveAbility(FGameplayAbilitySpec(Ability)));
+        }
+    }
+}
+
+void UInventoryItemInstance::TryRemoveAbilities(AActor* ItemOwner)
+{
+    if (!ItemOwner || !ItemOwner->HasAuthority())
+    {
+        return;
+    }
+    if (UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(ItemOwner))
+    {
+        const UItemStaticData* ItemStaticData = GetItemStaticData();
+        for (auto& Ability : GrantedAbilityHandles)
+        {
+            ASC->ClearAbility(Ability);
+        }
+        GrantedAbilityHandles.Empty();
+    }
 }

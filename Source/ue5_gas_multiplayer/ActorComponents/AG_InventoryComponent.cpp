@@ -130,7 +130,7 @@ void UAG_InventoryComponent::UnequipItem()
     {
         return;
     }
-    CurrentItem->OnUnequipped();
+    CurrentItem->OnUnequipped(GetOwner());
     CurrentItem = nullptr;
 }
 
@@ -140,7 +140,7 @@ void UAG_InventoryComponent::DropItem()
     {
         return;
     }
-    CurrentItem->OnDropped();
+    CurrentItem->OnDropped(GetOwner());
     RemoveItem(CurrentItem->ItemStaticDataClass);
     CurrentItem = nullptr;
 }
