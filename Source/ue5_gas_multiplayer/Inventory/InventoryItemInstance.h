@@ -23,6 +23,9 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintPure)
     const UItemStaticData* GetItemStaticData() const;
 
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    AItemActor* GetItemActor() const;
+    
     UPROPERTY(Replicated)
     TSubclassOf<UItemStaticData> ItemStaticDataClass;
 
