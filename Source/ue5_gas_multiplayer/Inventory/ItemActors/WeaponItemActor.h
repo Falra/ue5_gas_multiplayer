@@ -15,6 +15,10 @@ public:
     AWeaponItemActor();
 
     const UWeaponStaticData* GetWeaponStaticData() const;
+
+    UFUNCTION(BlueprintPure, BlueprintCallable)
+    FVector GetMuzzleLocation() const;
+    
 protected:
     virtual void InitInternal() override;
 
