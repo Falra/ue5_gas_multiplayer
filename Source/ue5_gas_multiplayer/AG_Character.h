@@ -84,6 +84,9 @@ class AAG_Character : public ACharacter, public IAbilitySystemInterface
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* UnequipItemAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* AttackAction;
     
 public:
     AAG_Character(const FObjectInitializer& ObjectInitializer);
@@ -146,6 +149,10 @@ protected:
     void EquipNext(const FInputActionValue& Value);
 
     void Unequip(const FInputActionValue& Value);
+
+    void OnAttackStarted(const FInputActionValue& Value);
+
+    void OnAttackEnded(const FInputActionValue& Value);
     
 protected:
     // APawn interface
@@ -193,6 +200,12 @@ protected:
     UPROPERTY(EditDefaultsOnly)
     FGameplayTag JumpTag;
 
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTag AttackStartedTag;
+
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTag AttackEndedTag;
+    
     UPROPERTY(EditDefaultsOnly)
     FGameplayTagContainer InAirTags;
 
