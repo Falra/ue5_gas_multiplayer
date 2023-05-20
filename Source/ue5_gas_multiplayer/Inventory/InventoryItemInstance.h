@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayAbilitySpecHandle.h"
+#include "ActiveGameplayEffectHandle.h"
 #include "UObject/Object.h"
 #include "InventoryItemInstance.generated.h"
 
@@ -47,6 +48,11 @@ protected:
     void TryGrantAbilities(AActor* ItemOwner);
     void TryRemoveAbilities(AActor* ItemOwner);
 
+    void TryApplyEffects(AActor* ItemOwner);
+    void TryRemoveEffects(AActor* ItemOwner);
+    
     UPROPERTY()
     TArray<FGameplayAbilitySpecHandle> GrantedAbilityHandles;
+
+    TArray<FActiveGameplayEffectHandle> OngoingEffectHandles;
 };

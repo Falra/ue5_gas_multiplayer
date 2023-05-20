@@ -108,4 +108,4 @@ enum class EMovementDirectionType : uint8
     None UMETA(DisplayName = "None"),
     OrientToMovement UMETA(DisplayName = "Orient To Movement"),
     Strafe UMETA(DisplayName = "Strafe")
-}
+};
