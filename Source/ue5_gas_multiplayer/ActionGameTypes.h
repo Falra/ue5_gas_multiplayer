@@ -69,6 +69,9 @@ public:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     TArray<TSubclassOf<UGameplayAbility>> GrantedAbilities;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    TArray<TSubclassOf<UGameplayEffect>> GrantedEffects;
 };
 
 UCLASS(BlueprintType, Blueprintable)
@@ -98,3 +101,11 @@ enum class EItemState : uint8
     Equipped UMETA(DisplayName = "Equipped"),
     Dropped UMETA(DisplayName = "Dropped")
 };
+
+UENUM(BlueprintType)
+enum class EMovementDirectionType : uint8
+{
+    None UMETA(DisplayName = "None"),
+    OrientToMovement UMETA(DisplayName = "Orient To Movement"),
+    Strafe UMETA(DisplayName = "Strafe")
+}
