@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "ActionGameTypes.h"
+#include "GameplayTagContainer.h"
 #include "AG_CharacterMovementComponent.generated.h"
 
 class UGameplayAbility;
@@ -20,8 +22,24 @@ public:
 
     bool TryTraversal(UAbilitySystemComponent* AbilitySystemComponent);
 
+    virtual void BeginPlay() override;
+
+    UFUNCTION(BlueprintPure, BlueprintCallable)
+    EMovementDirectionType GetMovementDirectionType() const { return MovementDirectionType; }
+
+    UFUNCTION(BlueprintCallable)
+    void SetMovementDirectionType(EMovementDirectionType NewMovementDirectionType);
+
+    UFUNCTION()
+    void OnEnforceStrafeTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
+    
 protected:
 
     UPROPERTY(EditDefaultsOnly)
-    TArray<TSubclassOf<UGameplayAbility>> TraversalAbilitiesOrdered; 
+    TArray<TSubclassOf<UGameplayAbility>> TraversalAbilitiesOrdered;
+
+    UPROPERTY(EditAnywhere)
+    EMovementDirectionType MovementDirectionType;
+
+    void HandleMovementDirection();
 };
