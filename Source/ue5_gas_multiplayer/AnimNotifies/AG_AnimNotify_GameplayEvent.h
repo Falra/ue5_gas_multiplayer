@@ -18,6 +18,6 @@ public:
 
 protected:
     
-    UPROPERTY()
+    UPROPERTY(EditAnywhere)
     FGameplayEventData Payload;
 };
