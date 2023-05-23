@@ -92,6 +92,9 @@ public:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     UAnimMontage* AttackMontage;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    float FireRate;
 };
 
 UENUM(BlueprintType)
