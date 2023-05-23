@@ -91,8 +91,8 @@ class AAG_Character : public ACharacter, public IAbilitySystemInterface
 public:
     AAG_Character(const FObjectInitializer& ObjectInitializer);
 
-    virtual void PostInitializeComponents() override;
-
+    virtual void PostLoad() override;
+    
     bool ApplyGameplayEffectToSelf(TSubclassOf<UGameplayEffect> Effect, FGameplayEffectContextHandle InEffectContext);
 
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;

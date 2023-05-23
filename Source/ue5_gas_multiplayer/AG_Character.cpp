@@ -79,9 +79,9 @@ AAG_Character::AAG_Character(const FObjectInitializer& ObjectInitializer)
     InventoryComponent->SetIsReplicated(true);
 }
 
-void AAG_Character::PostInitializeComponents()
+void AAG_Character::PostLoad()
 {
-    Super::PostInitializeComponents();
+    Super::PostLoad();
 
     if (IsValid(CharacterDataAsset))
     {
