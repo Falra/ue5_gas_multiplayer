@@ -14,5 +14,6 @@ class UE5_GAS_MULTIPLAYER_API UGA_InventoryCombatAbility : public UGA_InventoryA
 {
     GENERATED_BODY()
 
-
+public:
+    FGameplayEffectSpecHandle GetWeaponEffectSpec(const FHitResult& Hit);
 };
