@@ -86,6 +86,8 @@ bool AItemActor::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, F
 void AItemActor::Init(UInventoryItemInstance* InItemInstance)
 {
     ItemInstance = InItemInstance;
+
+    InitInternal();
 }
 
 void AItemActor::Tick(float DeltaTime)
