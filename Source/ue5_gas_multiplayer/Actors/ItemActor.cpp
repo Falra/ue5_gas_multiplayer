@@ -35,6 +35,8 @@ void AItemActor::BeginPlay()
 
             SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
             SphereComponent->SetGenerateOverlapEvents(true);
+
+            InitInternal();
         }
     }
 }
