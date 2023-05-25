@@ -8,7 +8,17 @@ public class ue5_gas_multiplayer : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput", "NetCore" });
+		PublicDependencyModuleNames.AddRange(new string[]
+		{
+			"Core",
+			"CoreUObject",
+			"Engine",
+			"InputCore",
+			"HeadMountedDisplay",
+			"EnhancedInput",
+			"NetCore",
+			"Niagara"
+		});
 		
 		PublicIncludePaths.Add("ue5_gas_multiplayer/");
 		
@@ -16,7 +26,7 @@ public class ue5_gas_multiplayer : ModuleRules
 		{
 			"GameplayAbilities",
 			"GameplayTags",
-			"GameplayTasks"
+			"GameplayTasks" 
 		});
 	}
 }
