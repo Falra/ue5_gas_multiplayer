@@ -6,6 +6,8 @@
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "AG_PhysicalMaterial.generated.h"
 
+class UNiagaraSystem;
+
 UCLASS()
 class UE5_GAS_MULTIPLAYER_API UAG_PhysicalMaterial : public UPhysicalMaterial
 {
@@ -13,4 +15,10 @@ class UE5_GAS_MULTIPLAYER_API UAG_PhysicalMaterial : public UPhysicalMaterial
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PhysicalMaterial")
     USoundBase* FootstepSound = nullptr;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PhysicalMaterial")
+    USoundBase* PointImpactSound = nullptr;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PhysicalMaterial")
+    UNiagaraSystem* PointImpactEffect = nullptr;
 };
