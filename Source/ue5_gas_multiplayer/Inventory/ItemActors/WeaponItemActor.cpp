@@ -2,7 +2,10 @@
 
 #include "WeaponItemActor.h"
 
+#include "NiagaraFunctionLibrary.h"
 #include "Inventory/InventoryItemInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "PhysicalMaterials/AG_PhysicalMaterial.h"
 
 AWeaponItemActor::AWeaponItemActor()
 {
@@ -46,5 +49,41 @@ void AWeaponItemActor::InitInternal()
             }
         }
         
+    }
+}
+
+void AWeaponItemActor::PlayWeaponEffects(const FHitResult& HitResult) const
+{
+    if (HasAuthority())
+    {
+        MulticastPlayWeaponEffects(HitResult);
+    }
+    else
+    {
+        PlayWeaponEffectsInternal(HitResult);
+    }
+}
+
+void AWeaponItemActor::MulticastPlayWeaponEffects_Implementation(const FHitResult& HitResult) const
+{
+    if (!Owner || Owner->GetLocalRole() != ROLE_AutonomousProxy)
+    {
+        PlayWeaponEffectsInternal(HitResult);
+    }
+}
+
+void AWeaponItemActor::PlayWeaponEffectsInternal(const FHitResult& HitResult) const
+{
+    if (HitResult.PhysMaterial.Get())
+    {
+        if (const auto* PhysicalMaterial = Cast<UAG_PhysicalMaterial>(HitResult.PhysMaterial.Get()))
+        {
+            UGameplayStatics::PlaySoundAtLocation(this, PhysicalMaterial->PointImpactSound, HitResult.ImpactPoint);
+            UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, PhysicalMaterial->PointImpactEffect, HitResult.ImpactPoint);
+        }
+    }
+    if (const auto* WeaponData = GetWeaponStaticData())
+    {
+        UGameplayStatics::PlaySoundAtLocation(this, WeaponData->AttackSound, GetActorLocation());
     }
 }
