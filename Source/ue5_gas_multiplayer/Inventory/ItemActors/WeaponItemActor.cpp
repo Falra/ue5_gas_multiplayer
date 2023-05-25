@@ -52,7 +52,7 @@ void AWeaponItemActor::InitInternal()
     }
 }
 
-void AWeaponItemActor::PlayWeaponEffects(const FHitResult& HitResult) const
+void AWeaponItemActor::PlayWeaponEffects(const FHitResult& HitResult)
 {
     if (HasAuthority())
     {
@@ -64,7 +64,7 @@ void AWeaponItemActor::PlayWeaponEffects(const FHitResult& HitResult) const
     }
 }
 
-void AWeaponItemActor::MulticastPlayWeaponEffects_Implementation(const FHitResult& HitResult) const
+void AWeaponItemActor::MulticastPlayWeaponEffects_Implementation(const FHitResult& HitResult)
 {
     if (!Owner || Owner->GetLocalRole() != ROLE_AutonomousProxy)
     {
@@ -72,7 +72,7 @@ void AWeaponItemActor::MulticastPlayWeaponEffects_Implementation(const FHitResul
     }
 }
 
-void AWeaponItemActor::PlayWeaponEffectsInternal(const FHitResult& HitResult) const
+void AWeaponItemActor::PlayWeaponEffectsInternal(const FHitResult& HitResult)
 {
     if (HitResult.PhysMaterial.Get())
     {

@@ -19,16 +19,16 @@ public:
     UFUNCTION(BlueprintPure, BlueprintCallable)
     FVector GetMuzzleLocation() const;
 
-    UFUNCTION(BlueprintPure, BlueprintCallable)
-    void PlayWeaponEffects(const FHitResult& HitResult) const;
+    UFUNCTION(BlueprintCallable)
+    void PlayWeaponEffects(const FHitResult& HitResult);
     
 protected:
     virtual void InitInternal() override;
 
     UFUNCTION(NetMulticast, Reliable)
-    void MulticastPlayWeaponEffects(const FHitResult& HitResult) const;
+    void MulticastPlayWeaponEffects(const FHitResult& HitResult);
 
-    void PlayWeaponEffectsInternal(const FHitResult& HitResult) const;
+    void PlayWeaponEffectsInternal(const FHitResult& HitResult);
     
     UPROPERTY()
     UMeshComponent* MeshComponent;
