@@ -17,4 +17,7 @@ class UE5_GAS_MULTIPLAYER_API UGA_InventoryCombatAbility : public UGA_InventoryA
 public:
     UFUNCTION(BlueprintPure, BlueprintCallable)
     FGameplayEffectSpecHandle GetWeaponEffectSpec(const FHitResult& Hit);
+
+    UFUNCTION(BlueprintPure, BlueprintCallable)
+    const bool GetWeaponToFocusTraceResult(float TraceDistance, ETraceTypeQuery TraceType, FHitResult& OutHitResult) const;
 };
