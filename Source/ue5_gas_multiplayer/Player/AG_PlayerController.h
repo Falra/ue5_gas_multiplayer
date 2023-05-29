@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/PlayerController.h"
 #include "AG_PlayerController.generated.h"
 
@@ -13,4 +14,18 @@ class UE5_GAS_MULTIPLAYER_API AAG_PlayerController : public APlayerController
 
 public:
     AAG_PlayerController();
+
+    void RestartPlayerIn(float InTime);
+
+protected:
+    virtual void OnPossess(APawn* InPawn) override;
+    virtual void OnUnPossess() override;
+
+    UFUNCTION()
+    void OnPawnDeathStateChanged(const FGameplayTag CallbackTag, int32 NewCount);
+
+    void RestartPlayer();
+
+    FTimerHandle RestartPlayerTimerHandle;
+    FDelegateHandle DeathStateTagDelegate;
 };
