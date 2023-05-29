@@ -107,6 +107,10 @@ public:
     UAG_InventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
 
     void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& ChangeData);
+
+    void OnHealthAttributeChanged(const FOnAttributeChangeData& ChangeData);
+
+    void StartRagdoll();
     
 protected:
     void GiveAbilities();
@@ -160,8 +164,9 @@ protected:
     void OnAimStarted(const FInputActionValue& Value);
 
     void OnAimEnded(const FInputActionValue& Value);
+
+    void OnRagdollTagStateChanged(const FGameplayTag CallbackTag, int32 NewCount);
     
-protected:
     // APawn interface
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -218,6 +223,12 @@ protected:
 
     UPROPERTY(EditDefaultsOnly)
     FGameplayTag AimEndedTag;
+
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTag ZeroHealthEventTag;
+
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTag RagdollStateTag;
     
     UPROPERTY(EditDefaultsOnly)
     FGameplayTagContainer InAirTags;
