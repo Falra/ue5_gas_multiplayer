@@ -2,6 +2,7 @@
 
 #include "AG_GameMode.h"
 #include "AG_Character.h"
+#include "Player/AG_PlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 
 AAG_GameMode::AAG_GameMode()
@@ -12,4 +13,12 @@ AAG_GameMode::AAG_GameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+}
+
+void AAG_GameMode::NotifyPlayerDied(AAG_PlayerController* PlayerController)
+{
+    if (PlayerController)
+    {
+        PlayerController->RestartPlayerIn(2.0f);
+    }
 }

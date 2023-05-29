@@ -48,7 +48,7 @@ void AAG_PlayerController::OnPawnDeathStateChanged(const FGameplayTag CallbackTa
         const UWorld* World = GetWorld();
         if (auto* GameMode = World ? Cast<AAG_GameMode>(World->GetAuthGameMode()) : nullptr)
         {
-
+            GameMode->NotifyPlayerDied(this);
         }
 
         if (DeathStateTagDelegate.IsValid())
