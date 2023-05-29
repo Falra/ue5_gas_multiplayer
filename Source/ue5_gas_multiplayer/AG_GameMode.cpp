@@ -13,6 +13,8 @@ AAG_GameMode::AAG_GameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+    PlayerControllerClass = AAG_PlayerController::StaticClass();
 }
 
 void AAG_GameMode::NotifyPlayerDied(AAG_PlayerController* PlayerController)
