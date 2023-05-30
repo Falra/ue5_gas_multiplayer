@@ -11,3 +11,15 @@ const UItemStaticData* UActionGameStatics::GetItemStaticData(TSubclassOf<UItemSt
     }
     return ItemDataClass->GetDefaultObject<UItemStaticData>();
 }
+
+void UActionGameStatics::ApplyRadialDamage(UObject* WorldContextObject, AActor* DamageCauser, FVector Location, float Radius,
+    float DamageAmount, TArray<TSubclassOf<UGameplayEffect>> DamageEffects, const TArray<TEnumAsByte<EObjectTypeQuery>>& ObjectTypes,
+    ETraceTypeQuery TraceType)
+{
+}
+
+AProjectile* UActionGameStatics::LaunchProjectile(UObject* WorldContextObject, TSubclassOf<UProjectileStaticData> ProjectileDataClass,
+    FTransform Transform, AActor* Owner, AActor* Instigator)
+{
+    return nullptr;
+}
