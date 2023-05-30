@@ -3,8 +3,19 @@
 
 #include "Projectile.h"
 
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+
+static TAutoConsoleVariable<int32> CVarShowProjectiles(
+    TEXT("ShowDebugProjectiles"),
+    0,
+    TEXT("Draw debug projectile paths.")
+    TEXT("0: off\n")
+    TEXT("1: on\n"),
+    ECVF_Cheat
+    );
 
 AProjectile::AProjectile()
 {
@@ -52,10 +63,21 @@ void AProjectile::BeginPlay()
         ProjectileMovementComponent->Bounciness = 0.0f;
         ProjectileMovementComponent->Velocity = ProjectileData->InitialSpeed * GetActorForwardVector();
     }
+
+    if (const int32 ShowDebugProjectiles = CVarShowProjectiles.GetValueOnGameThread())
+    {
+        DebugDrawPath();
+    }
 }
 
 void AProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+    if (const UProjectileStaticData* ProjectileData = GetProjectileStaticData())
+    {
+        UGameplayStatics::PlaySoundAtLocation(this, ProjectileData->ImpactSound, GetActorLocation());
+        UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ProjectileData->ImpactEffect, GetActorLocation());
+    }
+    
     Super::EndPlay(EndPlayReason);
 }
 
