@@ -24,5 +24,5 @@ public:
 
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     static AProjectile* LaunchProjectile(UObject* WorldContextObject, TSubclassOf<UProjectileStaticData> ProjectileDataClass, FTransform Transform,
-        AActor* Owner, AActor* Instigator);
+        AActor* Owner, APawn* Instigator);
 };
