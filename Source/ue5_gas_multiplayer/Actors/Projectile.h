@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ActionGameTypes.h"
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
@@ -14,10 +15,25 @@ class UE5_GAS_MULTIPLAYER_API AProjectile : public AActor
 public:
     AProjectile();
 
+    const UProjectileStaticData* GetProjectileStaticData() const;
+
+    UPROPERTY(BlueprintReadOnly, Replicated)
+    TSubclassOf<UProjectileStaticData> ProjectileDataClass;
+    
 protected:
     virtual void BeginPlay() override;
 
-public:
-    virtual void Tick(float DeltaTime) override;
+    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+    UPROPERTY()
+    class UProjectileMovementComponent* ProjectileMovementComponent;
+
+    UPROPERTY()
+    class UStaticMeshComponent* ProjectileMesh; 
+
+    void DebugDrawPath();
+
+    UFUNCTION()
+    void OnProjectileStop(const FHitResult& HitResult);
+    
 };
