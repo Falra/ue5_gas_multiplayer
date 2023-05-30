@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "ActionGameTypes.generated.h"
 
+class UNiagaraSystem;
+
 USTRUCT(BlueprintType)
 struct FCharacterData
 {
@@ -117,4 +119,45 @@ enum class EMovementDirectionType : uint8
     None UMETA(DisplayName = "None"),
     OrientToMovement UMETA(DisplayName = "Orient To Movement"),
     Strafe UMETA(DisplayName = "Strafe")
+};
+
+UCLASS(BlueprintType, Blueprintable)
+class UProjectileStaticData : public UObject
+{
+    GENERATED_BODY()
+
+public:
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    float BaseDamage;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    float DamageRadius;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    float GravityMultiplier = 1.0f;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    float InitialSpeed = 3000.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    float MaxSpeed = 3000.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UStaticMesh* ProjectileMesh;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    TArray<TSubclassOf<UGameplayEffect>> DamageEffects;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    TArray<TEnumAsByte<EObjectTypeQuery>> RadialDamageQueryTypes;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    TEnumAsByte<ETraceTypeQuery> RadialDamageTraceType;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UNiagaraSystem* ImpactEffect;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    USoundBase* ImpactSound;
 };
