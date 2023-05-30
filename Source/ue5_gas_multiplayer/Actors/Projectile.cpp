@@ -3,6 +3,7 @@
 
 #include "Projectile.h"
 
+#include "ActionGameStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -107,7 +108,9 @@ void AProjectile::OnProjectileStop(const FHitResult& HitResult)
 {
     if (const UProjectileStaticData* ProjectileData = GetProjectileStaticData())
     {
-        
+        UActionGameStatics::ApplyRadialDamage(this, GetOwner(), GetActorLocation(),
+            ProjectileData->DamageRadius, ProjectileData->BaseDamage, ProjectileData->DamageEffects,
+            ProjectileData->RadialDamageQueryTypes, ProjectileData->RadialDamageTraceType);
     }
     
     Destroy();
