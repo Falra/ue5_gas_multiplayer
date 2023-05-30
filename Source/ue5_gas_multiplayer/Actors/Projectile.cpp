@@ -83,10 +83,34 @@ void AProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void AProjectile::DebugDrawPath()
 {
+    if (const UProjectileStaticData* ProjectileData = GetProjectileStaticData())
+    {
+        FPredictProjectilePathParams PathParams;
+        PathParams.StartLocation = GetActorLocation();
+        PathParams.LaunchVelocity = ProjectileData->InitialSpeed * GetActorForwardVector();
+        PathParams.OverrideGravityZ = ProjectileData->GravityMultiplier;
+        PathParams.TraceChannel = ECollisionChannel::ECC_Visibility;
+        PathParams.bTraceComplex = true;
+        PathParams.bTraceWithCollision = true;
+        PathParams.DrawDebugType = EDrawDebugTrace::ForDuration;
+        PathParams.DrawDebugTime = 3.0f;
+
+        FPredictProjectilePathResult PathResult;
+        if (UGameplayStatics::PredictProjectilePath(this, PathParams, PathResult))
+        {
+            DrawDebugSphere(GetWorld(), PathResult.HitResult.Location, 50.0f, 16, FColor::Red);
+        }
+    }
 }
 
 void AProjectile::OnProjectileStop(const FHitResult& HitResult)
 {
+    if (const UProjectileStaticData* ProjectileData = GetProjectileStaticData())
+    {
+        
+    }
+    
+    Destroy();
 }
 
 void AProjectile::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
