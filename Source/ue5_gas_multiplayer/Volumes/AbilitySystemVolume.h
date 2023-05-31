@@ -3,12 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ActiveGameplayEffectHandle.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "GameplayTagContainer.h"
 #include "GameFramework/PhysicsVolume.h"
 #include "AbilitySystemVolume.generated.h"
 
 class UGameplayEffect;
 class UGameplayAbility;
+
+USTRUCT(BlueprintType)
+struct FAbilityVolumeEnteredActorInfo
+{
+    GENERATED_BODY()
+
+    TArray<FGameplayAbilitySpecHandle> AppliedAbilities;
+
+    TArray<FActiveGameplayEffectHandle> AppliedEffects;
+};
 
 UCLASS()
 class UE5_GAS_MULTIPLAYER_API AAbilitySystemVolume : public APhysicsVolume
@@ -47,4 +59,7 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TArray<TSubclassOf<UGameplayAbility>> PermanentAbilitiesToGive;
+
+    UPROPERTY(Transient)
+    TMap<AActor*, FAbilityVolumeEnteredActorInfo> EnteredActorsInfoMap;
 };
