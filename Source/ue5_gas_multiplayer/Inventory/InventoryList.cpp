@@ -33,3 +33,31 @@ void FInventoryList::RemoveItem(TSubclassOf<UItemStaticData> InItemStaticDataCla
         }
     }
 }
+
+void FInventoryList::RemoveItem(UInventoryItemInstance* InItemInstance)
+{
+    for (auto ItemIter = Items.CreateIterator(); ItemIter; ++ItemIter)
+    {
+        const FInventoryListItem& Item = *ItemIter;
+        if (Item.ItemInstance && Item.ItemInstance == InItemInstance)
+        {
+            ItemIter.RemoveCurrent();
+            MarkArrayDirty();
+            break;
+        }
+    }
+}
+
+TArray<UInventoryItemInstance*> FInventoryList::GetAllInstancesWithTag(FGameplayTag)
+{
+    TArray<UInventoryItemInstance*> OutInstances;
+
+    return OutInstances;
+}
+
+TArray<UInventoryItemInstance*> FInventoryList::GetAllAvailableInstancesOfType(TSubclassOf<UItemStaticData> InItemStaticDataClass)
+{
+    TArray<UInventoryItemInstance*> OutInstances;
+    
+    return OutInstances;
+}

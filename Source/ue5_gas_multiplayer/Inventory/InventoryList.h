@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Net/Serialization/FastArraySerializer.h"
 #include "InventoryList.generated.h"
 
@@ -32,7 +33,14 @@ struct FInventoryList : public FFastArraySerializer
     void AddItem(UInventoryItemInstance* InItemInstance);
     
     void RemoveItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
+    void RemoveItem(UInventoryItemInstance* InItemInstance);
+    
     TArray<FInventoryListItem>& GetItemsRef() { return Items; }
+
+    TArray<UInventoryItemInstance*> GetAllInstancesWithTag(FGameplayTag);
+
+    TArray<UInventoryItemInstance*> GetAllAvailableInstancesOfType(TSubclassOf<UItemStaticData> InItemStaticDataClass);
+    
 protected:
 
     UPROPERTY()
