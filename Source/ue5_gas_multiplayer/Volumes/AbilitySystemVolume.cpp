@@ -14,6 +14,11 @@ AAbilitySystemVolume::AAbilitySystemVolume()
 void AAbilitySystemVolume::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    if (bDrawDebug)
+    {
+        DrawDebugBox(GetWorld(), GetActorLocation(), GetBounds().BoxExtent, FColor::Red, false, 0, 0, 5);
+    }
 }
 
 void AAbilitySystemVolume::ActorEnteredVolume(AActor* Other)
