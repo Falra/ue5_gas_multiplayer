@@ -74,6 +74,12 @@ public:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     TArray<TSubclassOf<UGameplayEffect>> GrantedEffects;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    TArray<FGameplayTag> InventoryTags;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    int32 MaxStackCount = 1;
 };
 
 UCLASS(BlueprintType, Blueprintable)
@@ -103,6 +109,20 @@ public:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     USoundBase* AttackSound;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    FGameplayTag AmmoTag;
+};
+
+UCLASS(BlueprintType, Blueprintable)
+class UAmmoItemStaticData : public UItemStaticData
+{
+    GENERATED_BODY()
+
+public:
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UStaticMesh* StaticMesh;
 };
 
 UENUM(BlueprintType)
