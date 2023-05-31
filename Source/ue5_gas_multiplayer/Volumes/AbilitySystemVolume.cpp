@@ -3,18 +3,22 @@
 
 #include "AbilitySystemVolume.h"
 
-
 AAbilitySystemVolume::AAbilitySystemVolume()
 {
     PrimaryActorTick.bCanEverTick = true;
 }
 
-void AAbilitySystemVolume::BeginPlay()
-{
-    Super::BeginPlay();
-}
-
 void AAbilitySystemVolume::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+}
+
+void AAbilitySystemVolume::ActorEnteredVolume(AActor* Other)
+{
+    Super::ActorEnteredVolume(Other);
+}
+
+void AAbilitySystemVolume::ActorLeavingVolume(AActor* Other)
+{
+    Super::ActorLeavingVolume(Other);
 }
