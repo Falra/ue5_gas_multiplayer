@@ -13,4 +13,13 @@ class UE5_GAS_MULTIPLAYER_API AAmmoItemActor : public AItemActor
 
 public:
     AAmmoItemActor();
+
+    const UAmmoItemStaticData* GetAmmoItemStaticData() const;
+
+protected:
+
+    UPROPERTY()
+    UMeshComponent* MeshComponent;
+
+    virtual void InitInternal() override;
 };
