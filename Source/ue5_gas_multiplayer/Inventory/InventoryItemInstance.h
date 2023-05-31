@@ -10,6 +10,7 @@
 
 class AItemActor;
 class UItemStaticData;
+class UAG_InventoryComponent;
 
 UCLASS(BlueprintType, Blueprintable)
 class UE5_GAS_MULTIPLAYER_API UInventoryItemInstance : public UObject
@@ -17,7 +18,7 @@ class UE5_GAS_MULTIPLAYER_API UInventoryItemInstance : public UObject
     GENERATED_BODY()
 
 public:
-    virtual void Init(TSubclassOf<UItemStaticData> InItemStaticDataClass);
+    virtual void Init(TSubclassOf<UItemStaticData> InItemStaticDataClass, int32 InQuantity = 1);
     
     virtual bool IsSupportedForNetworking() const override { return true; }
 
@@ -40,8 +41,14 @@ public:
     virtual void OnUnequipped(AActor* ItemOwner = nullptr);
     virtual void OnDropped(AActor* ItemOwner = nullptr);
 
-protected:
+    int32 GetQuantity() const { return Quantity; }
 
+    void AddItems(int32 Count);
+
+protected:
+    UPROPERTY(Replicated)
+    int32 Quantity = 1;
+    
     UPROPERTY(Replicated)
     AItemActor* ItemActor;
 
