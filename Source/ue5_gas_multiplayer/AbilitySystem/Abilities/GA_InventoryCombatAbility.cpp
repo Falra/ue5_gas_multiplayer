@@ -67,9 +67,9 @@ bool UGA_InventoryCombatAbility::HasEnoughAmmo() const
 {
     if (const UWeaponStaticData* WeaponStaticData = GetEquippedItemWeaponStaticData())
     {
-        if (const UAG_InventoryComponent* InventoryComponent = GetInventoryComponent())
+        if (const UAG_InventoryComponent* Inventory = GetInventoryComponent())
         {
-            return !WeaponStaticData->AmmoTag.IsValid() || InventoryComponent->GetInventoryTagCount(WeaponStaticData->AmmoTag) > 0;
+            return !WeaponStaticData->AmmoTag.IsValid() || Inventory->GetInventoryTagCount(WeaponStaticData->AmmoTag) > 0;
         }
     }
     return false;
@@ -83,9 +83,9 @@ void UGA_InventoryCombatAbility::DecAmmo()
         {
             return;
         }
-        if (UAG_InventoryComponent* InventoryComponent = GetInventoryComponent())
+        if (UAG_InventoryComponent* Inventory = GetInventoryComponent())
         {
-            InventoryComponent->RemoveItemWithInventoryTag(WeaponStaticData->AmmoTag, 1);
+            Inventory->RemoveItemWithInventoryTag(WeaponStaticData->AmmoTag, 1);
         }
     }
 }
