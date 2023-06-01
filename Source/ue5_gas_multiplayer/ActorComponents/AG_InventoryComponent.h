@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FastArrayTagCounter.h"
 #include "GameplayTagContainer.h"
 #include "Components/ActorComponent.h"
 #include "Inventory/InventoryList.h"
@@ -33,6 +34,12 @@ public:
     void RemoveItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
 
     UFUNCTION(BlueprintCallable)
+    void RemoveItemInstance(UInventoryItemInstance* InItemInstance);
+
+    UFUNCTION(BlueprintCallable)
+    void RemoveItemWithInventoryTag(FGameplayTag Tag, int32 Count = 1);
+    
+    UFUNCTION(BlueprintCallable)
     void EquipItem(TSubclassOf<UItemStaticData> InItemStaticDataClass);
 
     UFUNCTION(BlueprintCallable)
@@ -57,6 +64,12 @@ public:
     static FGameplayTag EquipNextTag;
     static FGameplayTag UnequipTag;
 
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    int32 GetInventoryTagCount(FGameplayTag Tag) const;
+
+    UFUNCTION(BlueprintCallable)
+    void AddInventoryTagCount(FGameplayTag Tag, int32 Count = 1);
+    
 protected:
     
     UFUNCTION()
@@ -71,6 +84,11 @@ protected:
     UPROPERTY(Replicated)
     UInventoryItemInstance* CurrentItem;
 
+    UPROPERTY(Replicated)
+    FFastArrayTagCounter InventoryTags;
+
+    TArray<UInventoryItemInstance*> GetAllInstancesWithTag(FGameplayTag Tag);
+    
     void HandleGameplayEventInternal(const FGameplayEventData& Payload);
 
     UFUNCTION(Server, Reliable)
