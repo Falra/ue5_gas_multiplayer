@@ -45,6 +45,9 @@ protected:
     UPROPERTY(EditAnywhere)
     TSubclassOf<UItemStaticData> ItemStaticDataClass;
 
+    UPROPERTY(EditAnywhere, Replicated)
+    int32 Quantity = 1;
+    
     virtual void InitInternal() { /* nothing to do here */ }
     
 public:
