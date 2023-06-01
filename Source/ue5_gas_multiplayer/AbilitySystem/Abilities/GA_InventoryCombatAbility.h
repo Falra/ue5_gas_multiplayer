@@ -15,9 +15,18 @@ class UE5_GAS_MULTIPLAYER_API UGA_InventoryCombatAbility : public UGA_InventoryA
     GENERATED_BODY()
 
 public:
+
+    virtual bool CommitAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, FGameplayTagContainer* OptionalRelevantTags) override;
+    
     UFUNCTION(BlueprintPure, BlueprintCallable)
     FGameplayEffectSpecHandle GetWeaponEffectSpec(const FHitResult& Hit);
 
     UFUNCTION(BlueprintPure, BlueprintCallable)
     const bool GetWeaponToFocusTraceResult(float TraceDistance, ETraceTypeQuery TraceType, FHitResult& OutHitResult) const;
+
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    bool HasEnoughAmmo() const;
+
+    UFUNCTION(BlueprintCallable)
+    void DecAmmo();
 };

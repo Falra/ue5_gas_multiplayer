@@ -7,9 +7,16 @@
 #include "AbilitySystemComponent.h"
 #include "ActionGameTypes.h"
 #include "AG_Character.h"
+#include "ActorComponents/AG_InventoryComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Inventory/ItemActors/WeaponItemActor.h"
 #include "Kismet/KismetSystemLibrary.h"
+
+bool UGA_InventoryCombatAbility::CommitAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+    const FGameplayAbilityActivationInfo ActivationInfo, FGameplayTagContainer* OptionalRelevantTags)
+{
+    return Super::CommitAbility(Handle, ActorInfo, ActivationInfo, OptionalRelevantTags) && HasEnoughAmmo();
+}
 
 FGameplayEffectSpecHandle UGA_InventoryCombatAbility::GetWeaponEffectSpec(const FHitResult& Hit)
 {
@@ -54,4 +61,31 @@ const bool UGA_InventoryCombatAbility::GetWeaponToFocusTraceResult(float TraceDi
         ActorsToIgnore, EDrawDebugTrace::None, OutHitResult, true);
 
     return OutHitResult.bBlockingHit;
+}
+
+bool UGA_InventoryCombatAbility::HasEnoughAmmo() const
+{
+    if (const UWeaponStaticData* WeaponStaticData = GetEquippedItemWeaponStaticData())
+    {
+        if (const UAG_InventoryComponent* InventoryComponent = GetInventoryComponent())
+        {
+            return !WeaponStaticData->AmmoTag.IsValid() || InventoryComponent->GetInventoryTagCount(WeaponStaticData->AmmoTag) > 0;
+        }
+    }
+    return false;
+}
+
+void UGA_InventoryCombatAbility::DecAmmo()
+{
+    if (const UWeaponStaticData* WeaponStaticData = GetEquippedItemWeaponStaticData())
+    {
+        if (!WeaponStaticData->AmmoTag.IsValid())
+        {
+            return;
+        }
+        if (UAG_InventoryComponent* InventoryComponent = GetInventoryComponent())
+        {
+            InventoryComponent->RemoveItemWithInventoryTag(WeaponStaticData->AmmoTag, 1);
+        }
+    }
 }
