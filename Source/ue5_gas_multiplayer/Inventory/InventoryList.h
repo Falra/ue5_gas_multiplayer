@@ -37,7 +37,7 @@ struct FInventoryList : public FFastArraySerializer
     
     TArray<FInventoryListItem>& GetItemsRef() { return Items; }
 
-    TArray<UInventoryItemInstance*> GetAllInstancesWithTag(FGameplayTag);
+    TArray<UInventoryItemInstance*> GetAllInstancesWithTag(FGameplayTag Tag);
 
     TArray<UInventoryItemInstance*> GetAllAvailableInstancesOfType(TSubclassOf<UItemStaticData> InItemStaticDataClass);
     
