@@ -2,6 +2,7 @@
 
 #include "InventoryList.h"
 
+#include "ActionGameStatics.h"
 #include "ActionGameTypes.h"
 #include "InventoryItemInstance.h"
 
@@ -9,7 +10,7 @@ void FInventoryList::AddItem(TSubclassOf<UItemStaticData> InItemStaticDataClass)
 {
     FInventoryListItem& Item = Items.AddDefaulted_GetRef();
     Item.ItemInstance = NewObject<UInventoryItemInstance>();
-    Item.ItemInstance->Init(InItemStaticDataClass);
+    Item.ItemInstance->Init(InItemStaticDataClass, UActionGameStatics::GetItemStaticData(InItemStaticDataClass)->MaxStackCount);
     MarkItemDirty(Item);
 }
 

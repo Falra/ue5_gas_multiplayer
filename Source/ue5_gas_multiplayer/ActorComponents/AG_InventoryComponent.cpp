@@ -100,16 +100,24 @@ void UAG_InventoryComponent::AddItemInstance(UInventoryItemInstance* InItemInsta
         
         if (ItemsLeft <= 0)
         {
-            break;
+            return;
         }
     }
-    if (ItemsLeft > 0)
+    while (ItemsLeft > MaxItemStackCount)
     {
-        InventoryList.AddItem(InItemInstance);
+        AddItem(InItemInstance->GetItemStaticData()->GetClass());
         for (const auto InventoryTag : InItemInstance->GetItemStaticData()->InventoryTags)
         {
-            InventoryTags.AddTagCount(InventoryTag, InItemInstance->GetQuantity());
+            InventoryTags.AddTagCount(InventoryTag, MaxItemStackCount);
         }
+        ItemsLeft -= MaxItemStackCount;
+        InItemInstance->AddItems(-MaxItemStackCount);
+    }
+    
+    InventoryList.AddItem(InItemInstance);
+    for (const auto InventoryTag : InItemInstance->GetItemStaticData()->InventoryTags)
+    {
+        InventoryTags.AddTagCount(InventoryTag, InItemInstance->GetQuantity());
     }
 }
 
